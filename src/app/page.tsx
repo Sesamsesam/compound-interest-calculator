@@ -162,13 +162,7 @@ export default function Home() {
               Over tid kan denne effekt føre til eksponentiel vækst af din formue. Jo længere din investeringshorisont er, desto mere dramatisk bliver effekten.
             </Typography>
             
-            <Typography paragraph className="text-slate-300 mb-4">
-              Selv små månedlige bidrag kan vokse til betydelige summer over årtier, især når de investeres med konsistente afkast.
-            </Typography>
-            
-            <Typography paragraph className="text-slate-300">
-              Vores beregner giver dig mulighed for at visualisere denne vækst og forstå, hvordan forskellige afkastrater og investeringsperioder kan påvirke din økonomiske fremtid.
-            </Typography>
+            {/* The following two paragraphs have been moved to their own card below */}
           </Paper>
           
           {/* 7% and Tid er Din Ven Cards - Side by Side but in Single Column Flow */}
@@ -227,6 +221,24 @@ export default function Home() {
               </Box>
             </Paper>
           </Box>
+
+          {/* Additional Insight Card (moved text) */}
+          <Paper 
+            elevation={24}
+            className="mt-12 p-8 sm:p-12 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl"
+            sx={{ 
+              background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8))',
+              backdropFilter: 'blur(10px)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            }}
+          >
+            <Typography paragraph className="text-slate-300 mb-4">
+              Selv små månedlige bidrag kan vokse til betydelige summer over årtier, især når de investeres med konsistente afkast.
+            </Typography>
+            <Typography paragraph className="text-slate-300">
+              Vores beregner giver dig mulighed for at visualisere denne vækst og forstå, hvordan forskellige afkastrater og investeringsperioder kan påvirke din økonomiske fremtid.
+            </Typography>
+          </Paper>
         </Container>
       </section>
 
