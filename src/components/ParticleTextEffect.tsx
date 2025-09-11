@@ -14,9 +14,11 @@ class Particle {
   target: Vector2D = { x: 0, y: 0 }
 
   closeEnoughTarget = 50
-  maxSpeed = 4.0
-  maxForce = 0.5
-  particleSize = 10
+  // sharper formation parameters
+  closeEnoughTarget = 25
+  maxSpeed = 3.0
+  maxForce = 0.3
+  particleSize = 5
   isKilled = false
 
   startColor = { r: 0, g: 0, b: 0 }
@@ -149,7 +151,8 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
   // track left-click instead of right-click
   const mouseRef = useRef({ x: 0, y: 0, isPressed: false, isLeftClick: false })
 
-  const pixelSteps = 6
+  // smaller step → more particles → sharper text
+  const pixelSteps = 4
   const drawAsPoints = true
 
   const generateRandomPos = (x: number, y: number, mag: number): Vector2D => {
@@ -184,7 +187,8 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
 
     // Draw text
     offscreenCtx.fillStyle = "white"
-    offscreenCtx.font = "bold 100px Arial"
+    // larger font for denser pixel coverage
+    offscreenCtx.font = "bold 120px Arial"
     offscreenCtx.textAlign = "center"
     offscreenCtx.textBaseline = "middle"
     
@@ -245,10 +249,13 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
           particle.pos.x = randomPos.x
           particle.pos.y = randomPos.y
 
-          particle.maxSpeed = Math.random() * 20 + 15
+          // 25 % slower movement
+          particle.maxSpeed = Math.random() * 15 + 12
           particle.maxForce = particle.maxSpeed * 0.2
-          particle.particleSize = Math.random() * 6 + 6
-          particle.colorBlendRate = Math.random() * 0.05 + 0.02
+          // smaller particle size for crisp edges
+          particle.particleSize = Math.random() * 5 + 3
+          // slower colour blend for stability
+          particle.colorBlendRate = Math.random() * 0.03 + 0.01
 
           particles.push(particle)
         }
