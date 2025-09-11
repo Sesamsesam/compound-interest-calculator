@@ -5,6 +5,7 @@ import { ParticleTextEffect } from "@/components/ParticleTextEffect"
 import { WebGLShader } from "@/components/ui/web-gl-shader"
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote"
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -59,9 +60,9 @@ export default function Home() {
         {/* Scroll indicator arrow */}
         <Box
           className="absolute left-1/2 -translate-x-1/2 text-white/70 select-none"
-          style={{ bottom: '70px' }} // 10 px below the button
+          style={{ bottom: '50px' }} // 30 px below the button
         >
-          ˯
+          <KeyboardArrowDownIcon sx={{ fontSize: 40 }} />
         </Box>
       </section>
 
