@@ -255,25 +255,14 @@ export default function Home() {
               Styrken ved Renters Rente
             </Typography>
             <Box className="flex flex-col md:flex-row items-center gap-6">
-              {/* White square background behind image for better contrast */}
-              <Box
+              <Image
+                src="/rentes renter.png"
+                alt="Renters Rente Graf"
+                width={280}
+                height={380}
                 className="rounded-lg"
-                sx={{
-                  backgroundColor: '#ffffff',
-                  borderRadius: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Image
-                  src="/rentes rente transparent.png"
-                  alt="Renters Rente Graf"
-                  width={280}
-                  height={380}
-                  style={{ objectFit: 'contain' }}
-                />
-              </Box>
+                style={{ objectFit: 'contain' }}
+              />
               <Box>
                 <Typography paragraph className="text-slate-300 mb-4">
                   Renters rente er det finansielle fænomen, hvor du ikke kun tjener renter på din oprindelige investering, men også på de renter, du allerede har optjent.
