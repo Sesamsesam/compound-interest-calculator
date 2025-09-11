@@ -68,6 +68,22 @@ const formatShortDKK = (value: number): string => {
   return `${formatted} kr`;
 };
 
+// --- Helper to create dynamic reference gaps (same logic as chart) ---
+const calculateDynamicGaps = (userRate: number) => {
+  if (userRate >= 12) {
+    return { gap1: 8, gap2: 4 };
+  } else if (userRate >= 8) {
+    return { gap1: 6, gap2: 3 };
+  } else if (userRate >= 5) {
+    return { gap1: 3, gap2: 1.5 };
+  }
+  // Very low rates
+  return {
+    gap1: Math.max(1, userRate * 0.4),
+    gap2: Math.max(0.5, userRate * 0.2),
+  };
+};
+
 export default function Calculator() {
   const theme = useTheme();
   
@@ -217,8 +233,13 @@ export default function Calculator() {
   
   // Render reference values for comparison
   const renderReferenceValues = () => {
-    // Dynamically calculate values for +5 %, +10 %, +15 % over current annualRate
-    const refRates = [annualRate + 5, annualRate + 10, annualRate + 15];
+    // Dynamic benchmark rates match chart logic
+    const { gap1, gap2 } = calculateDynamicGaps(annualRate);
+    const refRate1 = Math.max(0.1, annualRate - gap1);  // yellow
+    const refRate2 = Math.max(0.1, annualRate - gap2);  // blue
+    const refRate3 = annualRate + 5;                    // purple
+
+    const refRates = [refRate1, refRate2, refRate3];
     const refBalances = refRates.map(
       (rate) => calculateYearlyData(principal, monthlyContribution, rate, years)[years].endBalance
     );
@@ -242,16 +263,16 @@ export default function Calculator() {
                   ? theme.palette.warning.main
                   : idx === 1
                   ? theme.palette.info.main
-                  : theme.palette.success.main,
+                  : '#9c27b0',
                 bgcolor: idx === 0
                   ? 'rgba(234, 179, 8, 0.1)'
                   : idx === 1
                   ? 'rgba(59, 130, 246, 0.1)'
-                  : 'rgba(34, 197, 94, 0.1)'
+                  : 'rgba(156, 39, 176, 0.1)'
               }}
             >
               <Typography variant="caption" display="block">
-                {`+${(idx + 1) * 5}% → ${(refRates[idx]).toFixed(1)}%`}
+                {`${refRates[idx].toFixed(1)}%`}
               </Typography>
               <Typography variant="body2" fontWeight="bold">
                 {formatShortDKK(balance)}

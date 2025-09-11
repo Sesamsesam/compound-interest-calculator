@@ -38,7 +38,7 @@ const formatDKK = (value: number): string => {
     style: 'currency',
     currency: 'DKK',
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 0
   }).format(value)
 }
 
@@ -74,6 +74,26 @@ const calculateWithRate = (principal: number, monthlyContribution: number, rate:
   return result;
 };
 
+// Calculate dynamic gaps based on user rate
+const calculateDynamicGaps = (userRate: number) => {
+  if (userRate >= 12) {
+    // High rates: Use full 8% and 4% gaps
+    return { gap1: 8, gap2: 4 };
+  } else if (userRate >= 8) {
+    // Medium rates: Scale gaps proportionally
+    return { gap1: 6, gap2: 3 };
+  } else if (userRate >= 5) {
+    // Lower rates: Smaller gaps
+    return { gap1: 3, gap2: 1.5 };
+  } else {
+    // Very low rates: Minimal gaps, ensure no negatives
+    return { 
+      gap1: Math.max(1, userRate * 0.4), 
+      gap2: Math.max(0.5, userRate * 0.2) 
+    };
+  }
+};
+
 const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundInterestChartProps) => {
   const chartRef = useRef<ChartJS>(null)
   const theme = useTheme()
@@ -89,14 +109,18 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
   const interests = yearlyData.map(data => data.interest)
   const cumulativeContributions = yearlyData.map(data => data.totalContributed)
   
-  // Calculate reference data for +5%, +10%, +15% rates
+  // Calculate reference data for dynamic benchmark rates
   const principal = yearlyData[0].endBalance;
   const monthlyContribution = yearlyData.length > 1 ? yearlyData[1].contribution / 12 : 0;
   const totalYears = yearlyData.length - 1;
   
-  const refRate1 = annualRate + 5;
-  const refRate2 = annualRate + 10;
-  const refRate3 = annualRate + 15;
+  // Calculate dynamic gaps based on user rate
+  const { gap1, gap2 } = calculateDynamicGaps(annualRate);
+  
+  // Dynamic benchmark rates
+  const refRate1 = Math.max(0.1, annualRate - gap1); // Yellow (ensure minimum 0.1%)
+  const refRate2 = Math.max(0.1, annualRate - gap2); // Blue (ensure minimum 0.1%)
+  const refRate3 = annualRate + 5; // Purple (always user rate + 5%)
   
   const refData1 = calculateWithRate(principal, monthlyContribution, refRate1, totalYears);
   const refData2 = calculateWithRate(principal, monthlyContribution, refRate2, totalYears);
@@ -107,15 +131,16 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
     labels: years,
     datasets: [
       {
-        label: 'Din balance',
+        label: 'Din',
         data: endBalances,
-        borderColor: '#9c27b0', // Purple color
-        backgroundColor: 'rgba(156, 39, 176, 0.2)', // Purple with opacity
+        // Switched to green
+        borderColor: theme.palette.success.main,
+        backgroundColor: `${theme.palette.success.main}33`, // 20 % opacity
         fill: true,
         tension: 0.3,
         pointRadius: 3,
         pointHoverRadius: 6,
-        pointBackgroundColor: '#9c27b0',
+        pointBackgroundColor: theme.palette.success.main,
         borderWidth: 2,
       },
       {
@@ -125,47 +150,44 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
         backgroundColor: 'transparent',
         borderDash: [5, 5],
         tension: 0.1,
-        // Show dot only on last data point
-        pointRadius: cumulativeContributions.map((_, idx) =>
-          idx === cumulativeContributions.length - 1 ? 3 : 0
-        ),
-        pointHoverRadius: cumulativeContributions.map((_, idx) =>
-          idx === cumulativeContributions.length - 1 ? 6 : 0
-        ),
+        // Add dots for all points
+        pointRadius: 3,
+        pointHoverRadius: 6,
         borderWidth: 2,
       },
       // Reference lines - only shown in line chart
       ...(chartType === 'line' ? [
         {
-          label: `+5% → ${refRate1.toFixed(1)}%`,
+          label: `${refRate1.toFixed(1)}%`,
           data: refData1,
           borderColor: theme.palette.warning.main, // Yellow
           backgroundColor: 'transparent',
           tension: 0.3,
-          pointRadius: 0,
-          pointHoverRadius: 4,
+          pointRadius: 3,
+          pointHoverRadius: 6,
           borderWidth: 1.5,
           borderDash: [3, 3],
         },
         {
-          label: `+10% → ${refRate2.toFixed(1)}%`,
+          label: `${refRate2.toFixed(1)}%`,
           data: refData2,
           borderColor: theme.palette.info.main, // Blue
           backgroundColor: 'transparent',
           tension: 0.3,
-          pointRadius: 0,
-          pointHoverRadius: 4,
+          pointRadius: 3,
+          pointHoverRadius: 6,
           borderWidth: 1.5,
           borderDash: [3, 3],
         },
         {
-          label: `+15% → ${refRate3.toFixed(1)}%`,
+          label: `${refRate3.toFixed(1)}%`,
           data: refData3,
-          borderColor: theme.palette.success.main, // Green
+          // Switched to purple
+          borderColor: '#9c27b0',
           backgroundColor: 'transparent',
           tension: 0.3,
-          pointRadius: 0,
-          pointHoverRadius: 4,
+          pointRadius: 3,
+          pointHoverRadius: 6,
           borderWidth: 1.5,
           borderDash: [3, 3],
         }
@@ -206,7 +228,6 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
     },
     plugins: {
       legend: {
-        // Keep legend on top but push items to the far right
         position: 'top',
         align: 'end',
         labels: {
@@ -239,40 +260,47 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
         borderWidth: 1,
         callbacks: {
           title: function(context) {
-            return `År ${context[0].label}`;
+            // Get the year number
+            const year = parseInt(context[0].label);
+            
+            // Determine which rate to show based on dataset
+            let rate = annualRate;
+            const datasetLabel = context[0].dataset.label || '';
+            
+            if (datasetLabel === `${refRate1.toFixed(1)}%`) {
+              rate = refRate1;
+            } else if (datasetLabel === `${refRate2.toFixed(1)}%`) {
+              rate = refRate2;
+            } else if (datasetLabel === `${refRate3.toFixed(1)}%`) {
+              rate = refRate3;
+            }
+            
+            // Return formatted title: "år X | Y%"
+            return `år ${year} | ${rate.toFixed(1)}%`;
           },
           label: function(context: TooltipItem<'line' | 'bar'>) {
             const label = context.dataset.label || '';
             const value = context.raw as number;
+            const year = parseInt(context.label);
             
+            // For line chart, show consistent format for all lines
             if (chartType === 'line') {
-              if (label === 'Din slut balance') {
-                return `${label}: ${formatDKK(value)}`;
-              } else if (label === 'Indbetalinger') {
-                return `${label}: ${formatDKK(value)}`;
-              } else if (label.includes('%')) {
-                return `${label}: ${formatDKK(value)}`;
-              }
+              // Get total invested up to this year
+              const totalInvested = year < yearlyData.length ? yearlyData[year].totalContributed : 0;
+              
+              // Calculate interest earned (value - total invested)
+              const interestEarned = Math.round(value - totalInvested);
+              
+              // Return formatted tooltip content
+              return [
+                `Total Investeret: ${formatDKK(totalInvested)}`,
+                `Total Værdi: ${formatDKK(value)}`,
+                `Renter Optjent: ${formatDKK(interestEarned)}`
+              ];
             } else {
-              // For stacked chart
+              // For stacked chart, keep original format
               return `${label}: ${formatDKK(value)}`;
             }
-            return '';
-          },
-          afterBody: function(context: TooltipItem<'line' | 'bar'>[]) {
-            if (chartType === 'line') {
-              const year = parseInt(context[0].label);
-              if (year > 0 && year < yearlyData.length) {
-                const data = yearlyData[year];
-                return [
-                  '',
-                  `Årlig indbetaling: ${formatDKK(data.contribution)}`,
-                  `Renter optjent: ${formatDKK(data.interest)}`,
-                  `Afkastrate: ${annualRate}%`
-                ];
-              }
-            }
-            return [];
           }
         }
       },
