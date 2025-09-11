@@ -14,10 +14,8 @@ class Particle {
   target: Vector2D = { x: 0, y: 0 }
 
   closeEnoughTarget = 50
-  // ↓ Tighter target + slower movement for smoother, sharper formation
-  closeEnoughTarget = 25
-  maxSpeed = 3.0
-  maxForce = 0.3
+  maxSpeed = 4.0
+  maxForce = 0.5
   particleSize = 10
   isKilled = false
 
@@ -148,10 +146,10 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
   const particlesRef = useRef<Particle[]>([])
   const frameCountRef = useRef(0)
   const wordIndexRef = useRef(0)
-  const mouseRef = useRef({ x: 0, y: 0, isPressed: false, isRightClick: false })
+  // track left-click instead of right-click
+  const mouseRef = useRef({ x: 0, y: 0, isPressed: false, isLeftClick: false })
 
-  // Lower pixelSteps → more particles → crisper text
-  const pixelSteps = 4
+  const pixelSteps = 6
   const drawAsPoints = true
 
   const generateRandomPos = (x: number, y: number, mag: number): Vector2D => {
@@ -186,8 +184,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
 
     // Draw text
     offscreenCtx.fillStyle = "white"
-    // Larger font → better pixel coverage (reduces holes)
-    offscreenCtx.font = "bold 120px Arial"
+    offscreenCtx.font = "bold 100px Arial"
     offscreenCtx.textAlign = "center"
     offscreenCtx.textBaseline = "middle"
     
@@ -248,11 +245,10 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
           particle.pos.x = randomPos.x
           particle.pos.y = randomPos.y
 
-          // ~25 % slower movement & smaller particle size
-          particle.maxSpeed = Math.random() * 15 + 12     // 12-27 range
+          particle.maxSpeed = Math.random() * 20 + 15
           particle.maxForce = particle.maxSpeed * 0.2
-          particle.particleSize = Math.random() * 5 + 3    // 3-8 range
-          particle.colorBlendRate = Math.random() * 0.03 + 0.01
+          particle.particleSize = Math.random() * 6 + 6
+          particle.colorBlendRate = Math.random() * 0.05 + 0.02
 
           particles.push(particle)
         }
@@ -308,7 +304,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     }
 
     // Handle mouse interaction
-    if (mouseRef.current.isPressed && mouseRef.current.isRightClick) {
+    if (mouseRef.current.isPressed && mouseRef.current.isLeftClick) {
       particles.forEach((particle) => {
         const distance = Math.sqrt(
           Math.pow(particle.pos.x - mouseRef.current.x, 2) + Math.pow(particle.pos.y - mouseRef.current.y, 2),
@@ -319,9 +315,9 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
       })
     }
 
-    // Auto-advance words
+    // Auto-advance words (linger 0.5 s longer → 225 frames ≈ +0.5 s @60 fps)
     frameCountRef.current++
-    if (frameCountRef.current % 150 === 0) {
+    if (frameCountRef.current % 225 === 0) {
       wordIndexRef.current = (wordIndexRef.current + 1) % words.length
       nextWord(words[wordIndexRef.current], canvas)
     }
@@ -345,7 +341,8 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     // Mouse event handlers
     const handleMouseDown = (e: MouseEvent) => {
       mouseRef.current.isPressed = true
-      mouseRef.current.isRightClick = e.button === 2
+      // treat left-click (button 0) as particle-kill trigger
+      mouseRef.current.isLeftClick = e.button === 0
       const rect = canvas.getBoundingClientRect()
       mouseRef.current.x = e.clientX - rect.left
       mouseRef.current.y = e.clientY - rect.top
@@ -353,7 +350,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
 
     const handleMouseUp = () => {
       mouseRef.current.isPressed = false
-      mouseRef.current.isRightClick = false
+      mouseRef.current.isLeftClick = false
     }
 
     const handleMouseMove = (e: MouseEvent) => {

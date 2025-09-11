@@ -12,7 +12,7 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Hero Section with Particle Effect - Full Width */}
       <section className="w-full overflow-hidden p-0 m-0">
-        <ParticleTextEffect words={["Byg Formue", "Renters Rente", "Den 8. Vidunder\naf Verden"]} />
+        <ParticleTextEffect words={["Det 8. Vidunder af Verden"]} />
       </section>
 
       {/* Hero Content Section */}

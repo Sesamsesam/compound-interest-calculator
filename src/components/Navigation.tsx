@@ -60,9 +60,7 @@ const Navigation = () => {
       position="sticky" 
       elevation={scrolled ? 4 : 0}
       sx={{
-        background: scrolled 
-          ? "linear-gradient(to right, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95))" 
-          : "transparent",
+        backgroundColor: "black",
         backdropFilter: scrolled ? "blur(8px)" : "none",
         transition: "all 0.3s ease",
         borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.1)" : "none",
