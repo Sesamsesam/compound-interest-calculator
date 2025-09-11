@@ -4,6 +4,7 @@ import { Container, Typography, Button, Box, Paper } from "@mui/material"
 import { ParticleTextEffect } from "@/components/ParticleTextEffect"
 import { WebGLShader } from "@/components/ui/web-gl-shader"
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"
+import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import Link from "next/link"
@@ -151,10 +152,10 @@ export default function Home() {
                   }} 
                 />
                 <Typography variant="h6" className="mb-2 text-white font-bold">
-                  7% Årligt Afkast
+                  20% Årligt Afkast
                 </Typography>
                 <Typography className="text-slate-300">
-                  5.000 kr/md over 20 år bliver til <strong className="text-yellow-400">2.631.910 kr</strong>
+                  5.000 kr/md over 20 år bliver til <strong className="text-yellow-400">13.441.535 kr</strong>
                 </Typography>
               </Box>
             </Paper>
@@ -173,7 +174,7 @@ export default function Home() {
               }}
             >
               <Box className="flex flex-col items-center text-center">
-                <TrendingUpIcon 
+                <AccessTimeIcon 
                   sx={{ 
                     fontSize: 48, 
                     color: 'success.main',
@@ -230,11 +231,11 @@ export default function Home() {
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
             }}
           >
-            <Typography 
-              variant="h4" 
-              component="h2" 
+            <Typography
+              variant="h4"
+              component="h2"
               className="mb-6 text-white text-center"
-              sx={{ 
+              sx={{
                 fontWeight: 700,
                 mb: 4,
                 position: 'relative',
@@ -242,24 +243,35 @@ export default function Home() {
                   content: '""',
                   position: 'absolute',
                   bottom: -10,
-                  left: 'calc(50% - 40px)',
-                  width: 80,
+                  left: 0,
+                  width: '100%',
                   height: 4,
                   backgroundColor: 'primary.main',
-                  borderRadius: 2
-                }
+                  borderRadius: 2,
+                },
               }}
             >
               Styrken ved Renters Rente
             </Typography>
-            
-            <Typography paragraph className="text-slate-300 mb-4">
-              Renters rente er det finansielle fænomen, hvor du ikke kun tjener renter på din oprindelige investering, men også på de renter, du allerede har optjent.
-            </Typography>
-            
-            <Typography paragraph className="text-slate-300 mb-4">
-              Over tid kan denne effekt føre til eksponentiel vækst af din formue. Jo længere din investeringshorisont er, desto mere dramatisk bliver effekten.
-            </Typography>
+            <Box className="flex flex-col md:flex-row items-center gap-6">
+              <Image
+                src="/einstein funny.png"
+                alt="Funny Albert Einstein"
+                width={220}
+                height={300}
+                className="rounded-lg"
+                style={{ objectFit: 'contain' }}
+              />
+              <Box>
+                <Typography paragraph className="text-slate-300 mb-4">
+                  Renters rente er det finansielle fænomen, hvor du ikke kun tjener renter på din oprindelige investering, men også på de renter, du allerede har optjent.
+                </Typography>
+
+                <Typography paragraph className="text-slate-300 mb-4">
+                  Over tid kan denne effekt føre til eksponentiel vækst af din formue. Jo længere din investeringshorisont er, desto mere dramatisk bliver effekten.
+                </Typography>
+              </Box>
+            </Box>
             
             {/* The following two paragraphs have been moved to their own card below */}
           </Paper>
@@ -336,7 +348,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black py-4 mt-12">
+      <footer className="bg-black/50 py-4 mt-12">
         <Container maxWidth="md">
           <Box className="flex justify-center">
             <Image
