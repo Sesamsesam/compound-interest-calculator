@@ -310,14 +310,16 @@ export default function Home() {
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
             }}
           >
-            <Typography
-              variant="h5"
-              component="h2"
-              className="mb-16 text-white"
-              sx={{ fontWeight: 700 }}
-            >
-              Start Din Rejse Mod Økonomisk Frihed
-            </Typography>
+            <Box sx={{ marginBottom: '64px' }}>
+              <Typography
+                variant="h5"
+                component="h2"
+                className="text-white"
+                sx={{ fontWeight: 700 }}
+              >
+                Start Din Rejse Mod Økonomisk Frihed
+              </Typography>
+            </Box>
             
             <Typography 
               variant="h6" 
