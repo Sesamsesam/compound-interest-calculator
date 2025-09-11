@@ -65,6 +65,7 @@ const Navigation = () => {
     <AppBar 
       position="sticky" 
       elevation={mounted && scrolled ? 4 : 0}
+      suppressHydrationWarning
       sx={{
         backgroundColor: "black",
         backdropFilter: mounted && scrolled ? "blur(8px)" : "none",
