@@ -323,11 +323,19 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
       },
       // Remove always-visible annotation; line tooltip appears on hover instead
     },
+    // Extra padding so first/last rotated labels are fully visible
+    layout: {
+      padding: {
+        left: 0,
+        right: 20,
+        top: 0,
+        bottom: 30, // extra bottom padding so rotated labels aren't clipped
+      },
+    },
     scales: {
       x: {
         title: {
-          display: true,
-          text: 'År',
+          display: false, // Removed centered x-axis title
           color: theme.palette.text.secondary,
           font: {
             family: theme.typography.fontFamily,
@@ -345,7 +353,10 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
             family: theme.typography.fontFamily,
           },
           callback: function(value, index) {
-            return index % 2 === 0 || index === years.length - 1 ? `År ${value}` : '';
+            // First tick: 'år 0', last tick: 'år N', middle ticks: plain numbers
+            if (index === 0) return 'år 0';
+            if (index === years.length - 1) return `år ${index}`;
+            return `${index}`;
           }
         }
       },
