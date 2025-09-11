@@ -161,8 +161,18 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
   const formatWordsForMobile = (wordList: string[]): string[] => {
     return wordList.map(word => {
       if (isMobile) {
-        // On mobile: split all words by space and join with newlines
-        return word.split(' ').join('\n');
+        /*
+         * General rule: split on each space → stacked vertically.
+         * Special-case: the phrase “Det 8. Vidunder” should only be
+         * two lines (“Det 8.” on first line, “Vidunder” on second).
+         */
+        const det8Regex = /^Det 8\./i
+        if (det8Regex.test(word) && word.includes("Vidunder")) {
+          // Ensure exactly two lines
+          return "Det 8.\nVidunder"
+        }
+        // Default behaviour
+        return word.split(' ').join('\n')
       }
       return word; // On desktop: keep original format
     });
