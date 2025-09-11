@@ -317,7 +317,8 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
 
     // Auto-advance words (linger 0.5 s longer → 225 frames ≈ +0.5 s @60 fps)
     frameCountRef.current++
-    if (frameCountRef.current % 225 === 0) {
+    // 0.2 s shorter → 213 frames at 60 fps
+    if (frameCountRef.current % 213 === 0) {
       wordIndexRef.current = (wordIndexRef.current + 1) % words.length
       nextWord(words[wordIndexRef.current], canvas)
     }
