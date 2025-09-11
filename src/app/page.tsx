@@ -6,12 +6,24 @@ import CalculateIcon from "@mui/icons-material/Calculate"
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Hero Section with Particle Effect - Full Width */}
-      <section className="w-full overflow-hidden p-0 m-0">
+      <section className="w-full overflow-hidden p-0 m-0 relative">
+        {/* Logo overlay */}
+        <div className="absolute top-4 right-4 z-10">
+          <Image 
+            src="/CPH_Trading_Academy_Logo-B2-removebg-preview.png" 
+            alt="Copenhagen Trading Academy Logo" 
+            width={200} 
+            height={100} 
+            className="transform scale-200"
+            style={{ transform: 'scale(2)' }}
+          />
+        </div>
         <ParticleTextEffect words={["Byg Formue", "Renters Rente", "Det 8. Vidunder\naf Verden"]} />
       </section>
 
@@ -61,35 +73,47 @@ export default function Home() {
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
             }}
           >
-            <Box className="flex flex-col items-center text-center">
-              <FormatQuoteIcon 
-                sx={{ 
-                  fontSize: 60, 
-                  color: 'primary.main',
-                  opacity: 0.8,
-                  mb: 2
-                }} 
-              />
-              <Typography 
-                variant="h4" 
-                component="blockquote"
-                className="mb-6 text-white italic"
-                sx={{ 
-                  fontWeight: 600,
-                  lineHeight: 1.4,
-                  letterSpacing: '-0.01em'
-                }}
-              >
-                &quot;Renters rente er verdens ottende vidunder. Den, der forstår det, tjener på det... den, der ikke gør, betaler for det.&quot;
-              </Typography>
-              <Typography 
-                variant="h6" 
-                component="cite"
-                className="text-slate-300"
-                sx={{ fontWeight: 500 }}
-              >
-                — Albert Einstein
-              </Typography>
+            <Box className="flex flex-col md:flex-row items-center gap-6">
+              <Box className="flex-shrink-0 md:w-1/3">
+                <Image
+                  src="/Albert-Einstein-PNG-Image-HD.png"
+                  alt="Albert Einstein"
+                  width={300}
+                  height={400}
+                  className="rounded-lg"
+                  style={{ objectFit: 'contain' }}
+                />
+              </Box>
+              <Box className="flex flex-col items-center text-center md:items-start md:text-left">
+                <FormatQuoteIcon 
+                  sx={{ 
+                    fontSize: 60, 
+                    color: 'primary.main',
+                    opacity: 0.8,
+                    mb: 2
+                  }} 
+                />
+                <Typography 
+                  variant="h4" 
+                  component="blockquote"
+                  className="mb-6 text-white italic"
+                  sx={{ 
+                    fontWeight: 600,
+                    lineHeight: 1.4,
+                    letterSpacing: '-0.01em'
+                  }}
+                >
+                  &quot;Renters rente er verdens ottende vidunder. Den, der forstår det, tjener på det... den, der ikke gør, betaler for det.&quot;
+                </Typography>
+                <Typography 
+                  variant="h6" 
+                  component="cite"
+                  className="text-slate-300"
+                  sx={{ fontWeight: 500 }}
+                >
+                  — Albert Einstein
+                </Typography>
+              </Box>
             </Box>
           </Paper>
         </Container>
