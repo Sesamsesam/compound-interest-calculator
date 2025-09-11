@@ -256,7 +256,7 @@ export default function Home() {
             </Typography>
             <Box className="flex flex-col md:flex-row items-center gap-6">
               <Image
-                src="/rentes rente.png"
+                src="/rentes rente transparent.png"
                 alt="Renters Rente Graf"
                 width={220}
                 height={300}
