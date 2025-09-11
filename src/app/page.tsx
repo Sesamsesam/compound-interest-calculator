@@ -66,31 +66,7 @@ export default function Home() {
         </Box>
       </section>
 
-      {/* Hero Content Section - Now in a Card */}
-      <section>
-        <Container maxWidth="md">
-          <Paper 
-            elevation={24}
-            className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
-            sx={{ 
-              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-            }}
-          >
-            <Typography 
-              variant="h6" 
-              className="text-slate-300 mx-auto text-center"
-              sx={{ fontWeight: 400 }}
-            >
-              Oplev hvordan små, regelmæssige investeringer kan vokse til betydelige formuer over tid med renters rente effekten.
-            </Typography>
-          </Paper>
-        </Container>
-      </section>
-
-      {/* Einstein Quote Section */}
+      {/* Einstein Quote Section - Moved to be first after hero */}
       <section>
         <Container maxWidth="md">
           <Paper 
@@ -149,55 +125,9 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* Story Section - Restructured to Single Column */}
+      {/* 7% and Tid er Din Ven Cards - Moved to be second after hero */}
       <section>
         <Container maxWidth="md">
-          {/* Styrken ved Renters Rente Card */}
-          <Paper 
-            elevation={24}
-            className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
-            sx={{ 
-              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
-            }}
-          >
-            <Typography 
-              variant="h4" 
-              component="h2" 
-              className="mb-6 text-white text-center"
-              sx={{ 
-                fontWeight: 700,
-                mb: 4,
-                position: 'relative',
-                '&::after': {
-                  content: '""',
-                  position: 'absolute',
-                  bottom: -10,
-                  left: 'calc(50% - 40px)',
-                  width: 80,
-                  height: 4,
-                  backgroundColor: 'primary.main',
-                  borderRadius: 2
-                }
-              }}
-            >
-              Styrken ved Renters Rente
-            </Typography>
-            
-            <Typography paragraph className="text-slate-300 mb-4">
-              Renters rente er det finansielle fænomen, hvor du ikke kun tjener renter på din oprindelige investering, men også på de renter, du allerede har optjent.
-            </Typography>
-            
-            <Typography paragraph className="text-slate-300 mb-4">
-              Over tid kan denne effekt føre til eksponentiel vækst af din formue. Jo længere din investeringshorisont er, desto mere dramatisk bliver effekten.
-            </Typography>
-            
-            {/* The following two paragraphs have been moved to their own card below */}
-          </Paper>
-          
-          {/* 7% and Tid er Din Ven Cards - Side by Side but in Single Column Flow */}
           <Box className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
             <Paper 
               className="p-6 backdrop-blur-sm rounded-xl"
@@ -259,6 +189,80 @@ export default function Home() {
               </Box>
             </Paper>
           </Box>
+        </Container>
+      </section>
+
+      {/* Hero Content Section - Moved to be third after hero */}
+      <section>
+        <Container maxWidth="md">
+          <Paper 
+            elevation={24}
+            className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
+            sx={{ 
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            }}
+          >
+            <Typography 
+              variant="h6" 
+              className="text-slate-300 mx-auto text-center"
+              sx={{ fontWeight: 400 }}
+            >
+              Oplev hvordan små, regelmæssige investeringer kan vokse til betydelige formuer over tid med renters rente effekten.
+            </Typography>
+          </Paper>
+        </Container>
+      </section>
+
+      {/* Story Section - Restructured to Single Column */}
+      <section>
+        <Container maxWidth="md">
+          {/* Styrken ved Renters Rente Card */}
+          <Paper 
+            elevation={24}
+            className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
+            sx={{ 
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            }}
+          >
+            <Typography 
+              variant="h4" 
+              component="h2" 
+              className="mb-6 text-white text-center"
+              sx={{ 
+                fontWeight: 700,
+                mb: 4,
+                position: 'relative',
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: -10,
+                  left: 'calc(50% - 40px)',
+                  width: 80,
+                  height: 4,
+                  backgroundColor: 'primary.main',
+                  borderRadius: 2
+                }
+              }}
+            >
+              Styrken ved Renters Rente
+            </Typography>
+            
+            <Typography paragraph className="text-slate-300 mb-4">
+              Renters rente er det finansielle fænomen, hvor du ikke kun tjener renter på din oprindelige investering, men også på de renter, du allerede har optjent.
+            </Typography>
+            
+            <Typography paragraph className="text-slate-300 mb-4">
+              Over tid kan denne effekt føre til eksponentiel vækst af din formue. Jo længere din investeringshorisont er, desto mere dramatisk bliver effekten.
+            </Typography>
+            
+            {/* The following two paragraphs have been moved to their own card below */}
+          </Paper>
 
           {/* Additional Insight Card (moved text) */}
           <Paper 
