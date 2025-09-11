@@ -27,7 +27,7 @@ interface AnimatedValueProps {
 export const AnimatedValue = ({
   value,
   formatter = (val: number) => val.toString(),
-  duration = 0.8,
+  duration = 0.5,                // slightly faster by default
   delay = 0,
   className = "",
   precision = 0,
@@ -41,8 +41,20 @@ export const AnimatedValue = ({
   
   // Previous value ref to animate from
   const prevValueRef = useRef(value);
+  // Track current animation controller so we can stop it if a new one starts
+  const animRef = useRef<ReturnType<typeof animate> | null>(null);
+  // Debounce timer id
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    // Cleanup helper
+    const stopCurrentAnim = () => {
+      if (animRef.current) {
+        animRef.current.stop();
+        animRef.current = null;
+      }
+    };
+
     // Don't animate on first render, just set the value
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -52,36 +64,46 @@ export const AnimatedValue = ({
     }
 
     // Skip animation for very small changes to avoid visual noise
-    if (Math.abs(value - prevValueRef.current) < 0.1) {
+    if (Math.abs(value - prevValueRef.current) < 1.0) {
       setDisplayValue(value);
       prevValueRef.current = value;
       return;
     }
 
-    // Animate from previous value to new value
-    const animationControls = animate(prevValueRef.current, value, {
-      duration: duration,
-      delay: delay,
-      ease: easing,
-      onUpdate: (latest) => {
-        // Round to precision to avoid excessive decimal places
-        if (precision === 0) {
-          setDisplayValue(Math.round(latest));
-        } else {
-          const factor = Math.pow(10, precision);
-          setDisplayValue(Math.round(latest * factor) / factor);
-        }
-      },
-      onComplete: () => {
-        // Ensure final value is exactly the target value
-        setDisplayValue(value);
-        prevValueRef.current = value;
-      }
-    });
+    // Debounce: clear any pending update
+    if (debounceRef.current) clearTimeout(debounceRef.current);
 
-    // Cleanup animation on unmount or value change
+    debounceRef.current = setTimeout(() => {
+      // Stop a running animation to prevent overlap
+      stopCurrentAnim();
+
+      // Animate from previous value to new value
+      animRef.current = animate(prevValueRef.current, value, {
+        duration,
+        delay,
+        ease: easing,
+        onUpdate: (latest) => {
+          // Round to precision to avoid excessive decimal places
+          if (precision === 0) {
+            setDisplayValue(Math.round(latest));
+          } else {
+            const factor = Math.pow(10, precision);
+            setDisplayValue(Math.round(latest * factor) / factor);
+          }
+        },
+        onComplete: () => {
+          // Ensure final value is exactly the target value
+          setDisplayValue(value);
+          prevValueRef.current = value;
+          stopCurrentAnim();
+        },
+      });
+    }, 120); // 120 ms debounce
+
     return () => {
-      animationControls.stop();
+      // Clear debounce timer & stop animation on cleanup
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      stopCurrentAnim();
     };
   }, [value, duration, delay, easing, precision]);
 
