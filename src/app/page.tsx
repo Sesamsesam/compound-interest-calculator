@@ -225,7 +225,8 @@ export default function Home() {
             elevation={24}
             className="p-8 sm:p-12 rounded-xl mb-12"
             sx={{ 
-              backgroundColor: '#ffffff',
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              backdropFilter: 'blur(10px)',
               border: '1px solid rgba(0,0,0,0.1)',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
             }}
