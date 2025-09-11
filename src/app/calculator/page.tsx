@@ -676,7 +676,14 @@ export default function Calculator() {
               </ToggleButtonGroup>
             </Box>
             
-            <Box sx={{ height: { xs: 300, md: 400 } }}>
+            {/* Chart wrapper – extra bottom padding & taller mobile height to avoid overflow */}
+            <Box
+              sx={{
+                height: { xs: 350, md: 420 },
+                pb: { xs: 3, md: 4 },           /* space below grid/axes */
+                overflow: 'hidden',             /* ensure no horizontal bleed */
+              }}
+            >
               <CompoundInterestChart 
                 yearlyData={yearlyData} 
                 chartType={chartType} 

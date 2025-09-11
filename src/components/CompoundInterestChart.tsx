@@ -107,7 +107,7 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
     labels: years,
     datasets: [
       {
-        label: 'Din slut balance',
+        label: 'Din balance',
         data: endBalances,
         borderColor: '#9c27b0', // Purple color
         backgroundColor: 'rgba(156, 39, 176, 0.2)', // Purple with opacity
@@ -125,7 +125,13 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
         backgroundColor: 'transparent',
         borderDash: [5, 5],
         tension: 0.1,
-        pointRadius: 0,
+        // Show dot only on last data point
+        pointRadius: cumulativeContributions.map((_, idx) =>
+          idx === cumulativeContributions.length - 1 ? 3 : 0
+        ),
+        pointHoverRadius: cumulativeContributions.map((_, idx) =>
+          idx === cumulativeContributions.length - 1 ? 6 : 0
+        ),
         borderWidth: 2,
       },
       // Reference lines - only shown in line chart
@@ -200,12 +206,15 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
     },
     plugins: {
       legend: {
+        // Keep legend on top but push items to the far right
         position: 'top',
+        align: 'end',
         labels: {
           color: theme.palette.text.primary,
           font: {
             family: theme.typography.fontFamily,
             weight: 'bold',
+            size: 11, // 25 % smaller legend text
           },
           usePointStyle: true,
           pointStyle: 'circle',
@@ -267,31 +276,7 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
           }
         }
       },
-      annotation: chartType === 'line' ? {
-        annotations: {
-          line1: {
-            type: 'line',
-            yMin: yearlyData[yearlyData.length - 1].totalContributed,
-            yMax: yearlyData[yearlyData.length - 1].totalContributed,
-            xMin: 0,
-            xMax: yearlyData.length - 1,
-            borderColor: theme.palette.grey[500],
-            borderWidth: 1,
-            borderDash: [5, 5],
-            label: {
-              display: true,
-              content: 'Total indbetalt',
-              position: 'end',
-              backgroundColor: theme.palette.grey[700],
-              color: theme.palette.common.white,
-              font: {
-                size: 12,
-              },
-              padding: 6,
-            },
-          },
-        }
-      } : undefined,
+      // Remove always-visible annotation; line tooltip appears on hover instead
     },
     scales: {
       x: {
