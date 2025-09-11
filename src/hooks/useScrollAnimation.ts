@@ -18,7 +18,8 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
   const { 
     threshold = 0.1, 
     rootMargin = '0px', 
-    triggerOnce = true 
+    // By default run every time the element enters / leaves the viewport
+    triggerOnce = false
   } = options;
   
   const ref = useRef<HTMLElement | null>(null);
