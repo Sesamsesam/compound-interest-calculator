@@ -27,6 +27,7 @@ import InfoIcon from "@mui/icons-material/Info"
 import ShowChartIcon from "@mui/icons-material/ShowChart"
 import BarChartIcon from "@mui/icons-material/BarChart"
 import CompoundInterestChart from "@/components/CompoundInterestChart"
+import { GlowingEffect } from "@/components/ui/glowing-effect"
 
 // Calculation types
 interface YearlyData {
@@ -321,203 +322,206 @@ export default function Calculator() {
       >
         {/* Left column - Inputs */}
         <Box sx={{ minWidth: 0 }}>
-          <Paper 
-            elevation={3} 
-            sx={{ 
-              p: 3, 
-              borderRadius: 2,
-              background: 'rgba(30, 41, 59, 0.5)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)'
-            }}
-          >
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-              Investeringsparametre
-            </Typography>
-            
-            {/* Principal */}
-            <Box sx={{ mb: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="body2">Startkapital</Typography>
-                <Tooltip title="Dit oprindelige investeringsbeløb">
-                  <IconButton size="small">
-                    <InfoIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
+          <Box sx={{ position: 'relative', borderRadius: 2 }}>
+            <GlowingEffect disabled={false} proximity={100} spread={30} glow={true} />
+            <Paper 
+              elevation={3} 
+              sx={{ 
+                p: 3, 
+                borderRadius: 2,
+                background: 'rgba(30, 41, 59, 0.5)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+              }}
+            >
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                Investeringsparametre
+              </Typography>
+              
+              {/* Principal */}
+              <Box sx={{ mb: 3 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="body2">Startkapital</Typography>
+                  <Tooltip title="Dit oprindelige investeringsbeløb">
+                    <IconButton size="small">
+                      <InfoIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+                <TextField
+                  fullWidth
+                  value={principal === 0 ? "" : principal}
+                  onChange={handlePrincipalChange}
+                  error={errors.principal}
+                  helperText={errors.principal ? "Værdi skal være mellem 0 og 10.000.000" : ""}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">DKK</InputAdornment>,
+                  }}
+                  type="text"
+                  size="small"
+                  variant="outlined"
+                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                  sx={{
+                    '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
+                      WebkitAppearance: 'none',
+                      margin: 0,
+                    },
+                    '& input[type=number]': {
+                      MozAppearance: 'textfield',
+                    },
+                  }}
+                />
               </Box>
-              <TextField
-                fullWidth
-                value={principal === 0 ? "" : principal}
-                onChange={handlePrincipalChange}
-                error={errors.principal}
-                helperText={errors.principal ? "Værdi skal være mellem 0 og 10.000.000" : ""}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">DKK</InputAdornment>,
-                }}
-                type="text"
-                size="small"
-                variant="outlined"
-                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                sx={{
-                  '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
-                    WebkitAppearance: 'none',
-                    margin: 0,
-                  },
-                  '& input[type=number]': {
-                    MozAppearance: 'textfield',
-                  },
-                }}
-              />
-            </Box>
-            
-            {/* Monthly Contribution */}
-            <Box sx={{ mb: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="body2">Månedligt Bidrag</Typography>
-                <Tooltip title="Beløb du investerer hver måned">
-                  <IconButton size="small">
-                    <InfoIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
+              
+              {/* Monthly Contribution */}
+              <Box sx={{ mb: 3 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="body2">Månedligt Bidrag</Typography>
+                  <Tooltip title="Beløb du investerer hver måned">
+                    <IconButton size="small">
+                      <InfoIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+                <TextField
+                  fullWidth
+                  value={monthlyContribution === 0 ? "" : monthlyContribution}
+                  onChange={handleMonthlyContributionChange}
+                  error={errors.monthlyContribution}
+                  helperText={errors.monthlyContribution ? "Værdi skal være mellem 0 og 1.000.000" : ""}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">DKK</InputAdornment>,
+                  }}
+                  type="text"
+                  size="small"
+                  variant="outlined"
+                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                  sx={{
+                    '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
+                      WebkitAppearance: 'none',
+                      margin: 0,
+                    },
+                    '& input[type=number]': {
+                      MozAppearance: 'textfield',
+                    },
+                  }}
+                />
+                <Slider
+                  value={monthlyContribution}
+                  onChange={handleSliderChange('monthlyContribution')}
+                  min={0}
+                  max={50000}
+                  step={500}
+                  valueLabelDisplay="auto"
+                  valueLabelFormat={(value) => formatDKK(value)}
+                  sx={{ mt: 2 }}
+                />
               </Box>
-              <TextField
-                fullWidth
-                value={monthlyContribution === 0 ? "" : monthlyContribution}
-                onChange={handleMonthlyContributionChange}
-                error={errors.monthlyContribution}
-                helperText={errors.monthlyContribution ? "Værdi skal være mellem 0 og 1.000.000" : ""}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">DKK</InputAdornment>,
-                }}
-                type="text"
-                size="small"
-                variant="outlined"
-                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                sx={{
-                  '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
-                    WebkitAppearance: 'none',
-                    margin: 0,
-                  },
-                  '& input[type=number]': {
-                    MozAppearance: 'textfield',
-                  },
-                }}
-              />
-              <Slider
-                value={monthlyContribution}
-                onChange={handleSliderChange('monthlyContribution')}
-                min={0}
-                max={50000}
-                step={500}
-                valueLabelDisplay="auto"
-                valueLabelFormat={(value) => formatDKK(value)}
-                sx={{ mt: 2 }}
-              />
-            </Box>
-            
-            {/* Annual Rate */}
-            <Box sx={{ mb: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="body2">Årlig Rente</Typography>
-                <Tooltip title="Forventet årlig afkast i procent">
-                  <IconButton size="small">
-                    <InfoIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
+              
+              {/* Annual Rate */}
+              <Box sx={{ mb: 3 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="body2">Årlig Rente</Typography>
+                  <Tooltip title="Forventet årlig afkast i procent">
+                    <IconButton size="small">
+                      <InfoIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+                <TextField
+                  fullWidth
+                  value={annualRate === 0 ? "" : annualRate}
+                  onChange={handleAnnualRateChange}
+                  error={errors.annualRate}
+                  helperText={errors.annualRate ? "Værdi skal være mellem 0 og 50" : ""}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                  }}
+                  type="text"
+                  size="small"
+                  variant="outlined"
+                  inputProps={{ inputMode: 'decimal', pattern: '[0-9]*[.]?[0-9]*' }}
+                  sx={{
+                    '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
+                      WebkitAppearance: 'none',
+                      margin: 0,
+                    },
+                    '& input[type=number]': {
+                      MozAppearance: 'textfield',
+                    },
+                  }}
+                />
+                <Slider
+                  value={annualRate}
+                  onChange={handleSliderChange('annualRate')}
+                  min={0}
+                  max={30}
+                  step={0.5}
+                  valueLabelDisplay="auto"
+                  valueLabelFormat={(value) => `${value}%`}
+                  sx={{ mt: 2 }}
+                  marks={[
+                    { value: 7, label: '7%' },
+                    { value: 20, label: '20%' },
+                    { value: 30, label: '30%' },
+                  ]}
+                />
               </Box>
-              <TextField
-                fullWidth
-                value={annualRate === 0 ? "" : annualRate}
-                onChange={handleAnnualRateChange}
-                error={errors.annualRate}
-                helperText={errors.annualRate ? "Værdi skal være mellem 0 og 50" : ""}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">%</InputAdornment>,
-                }}
-                type="text"
-                size="small"
-                variant="outlined"
-                inputProps={{ inputMode: 'decimal', pattern: '[0-9]*[.]?[0-9]*' }}
-                sx={{
-                  '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
-                    WebkitAppearance: 'none',
-                    margin: 0,
-                  },
-                  '& input[type=number]': {
-                    MozAppearance: 'textfield',
-                  },
-                }}
-              />
-              <Slider
-                value={annualRate}
-                onChange={handleSliderChange('annualRate')}
-                min={0}
-                max={30}
-                step={0.5}
-                valueLabelDisplay="auto"
-                valueLabelFormat={(value) => `${value}%`}
-                sx={{ mt: 2 }}
-                marks={[
-                  { value: 7, label: '7%' },
-                  { value: 20, label: '20%' },
-                  { value: 30, label: '30%' },
-                ]}
-              />
-            </Box>
-            
-            {/* Years */}
-            <Box sx={{ mb: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="body2">Investeringsperiode</Typography>
-                <Tooltip title="Antal år du planlægger at investere">
-                  <IconButton size="small">
-                    <InfoIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
+              
+              {/* Years */}
+              <Box sx={{ mb: 3 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="body2">Investeringsperiode</Typography>
+                  <Tooltip title="Antal år du planlægger at investere">
+                    <IconButton size="small">
+                      <InfoIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+                <TextField
+                  fullWidth
+                  value={years === 0 ? "" : years}
+                  onChange={handleYearsChange}
+                  error={errors.years}
+                  helperText={errors.years ? "Værdi skal være mellem 1 og 100" : ""}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">år</InputAdornment>,
+                  }}
+                  type="text"
+                  size="small"
+                  variant="outlined"
+                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                  sx={{
+                    '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
+                      WebkitAppearance: 'none',
+                      margin: 0,
+                    },
+                    '& input[type=number]': {
+                      MozAppearance: 'textfield',
+                    },
+                  }}
+                />
+                <Slider
+                  value={years}
+                  onChange={handleSliderChange('years')}
+                  min={1}
+                  max={50}
+                  step={1}
+                  valueLabelDisplay="auto"
+                  valueLabelFormat={(value) => `${value} år`}
+                  sx={{ mt: 2 }}
+                  marks={[
+                    { value: 5, label: '5' },
+                    { value: 20, label: '20' },
+                    { value: 40, label: '40' },
+                  ]}
+                />
               </Box>
-              <TextField
-                fullWidth
-                value={years === 0 ? "" : years}
-                onChange={handleYearsChange}
-                error={errors.years}
-                helperText={errors.years ? "Værdi skal være mellem 1 og 100" : ""}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">år</InputAdornment>,
-                }}
-                type="text"
-                size="small"
-                variant="outlined"
-                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                sx={{
-                  '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
-                    WebkitAppearance: 'none',
-                    margin: 0,
-                  },
-                  '& input[type=number]': {
-                    MozAppearance: 'textfield',
-                  },
-                }}
-              />
-              <Slider
-                value={years}
-                onChange={handleSliderChange('years')}
-                min={1}
-                max={50}
-                step={1}
-                valueLabelDisplay="auto"
-                valueLabelFormat={(value) => `${value} år`}
-                sx={{ mt: 2 }}
-                marks={[
-                  { value: 5, label: '5' },
-                  { value: 20, label: '20' },
-                  { value: 40, label: '40' },
-                ]}
-              />
-            </Box>
-            
-            {/* Reference values */}
-            {renderReferenceValues()}
-          </Paper>
+              
+              {/* Reference values */}
+              {renderReferenceValues()}
+            </Paper>
+          </Box>
         </Box>
         
         {/* Right column - Results */}
@@ -533,8 +537,11 @@ export default function Calculator() {
             <Box sx={{ 
               width: '100%', 
               flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)' },
-              flexGrow: 1 
+              flexGrow: 1,
+              position: 'relative',
+              borderRadius: 2
             }}>
+              <GlowingEffect disabled={false} proximity={100} spread={30} glow={true} />
               <Card 
                 sx={{ 
                   height: '100%',
@@ -565,9 +572,12 @@ export default function Calculator() {
             {/* --- Slutbalance ------------------------------------------------------ */}
             <Box sx={{ 
               width: '100%', 
-              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)' },
-              flexGrow: 1 
+              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(50% - 12px)' },
+              flexGrow: 1,
+              position: 'relative',
+              borderRadius: 2
             }}>
+              <GlowingEffect disabled={false} proximity={100} spread={30} glow={true} />
               <Card 
                 sx={{ 
                   height: '100%',
@@ -595,138 +605,113 @@ export default function Calculator() {
               </Card>
             </Box>
 
-            {/* --- Renter Tjent ----------------------------------------------------- */}
-            <Box sx={{ 
-              width: '100%', 
-              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)' },
-              flexGrow: 1 
-            }}>
-              <Card 
-                sx={{ 
-                  height: '100%',
-                  background: theme.palette.gradients.cardBase,
-                  borderRadius: 2,
-                  boxShadow: theme.shadows[4],
-                  transition: 'transform 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-5px)',
-                    boxShadow: theme.shadows[8],
-                  }
-                }}
-              >
-                <CardContent>
-                  <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }} gutterBottom>
-                    Renter Tjent
-                  </Typography>
-                  <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
-                    {formatDKK(totalInterest)}
-                  </Typography>
-                  <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
-                    Afkast på investering
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
+            {/* Third summary card removed */}
           </Box>
           
           {/* Chart Section */}
-          <Paper 
-            elevation={3} 
-            sx={{ 
-              p: 3, 
-              mb: 4, 
-              borderRadius: 2,
-              background: 'rgba(30, 41, 59, 0.5)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)'
-            }}
-          >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                Investeringsvækst over Tid
-              </Typography>
-              
-              <ToggleButtonGroup
-                value={chartType}
-                exclusive
-                onChange={handleChartTypeChange}
-                size="small"
-              >
-                <ToggleButton value="line" aria-label="line chart">
-                  <Tooltip title="Linjediagram">
-                    <ShowChartIcon fontSize="small" />
-                  </Tooltip>
-                </ToggleButton>
-                <ToggleButton value="stacked" aria-label="stacked bar chart">
-                  <Tooltip title="Søjlediagram">
-                    <BarChartIcon fontSize="small" />
-                  </Tooltip>
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Box>
-            
-            {/* Chart wrapper – extra bottom padding & taller mobile height to avoid overflow */}
-            <Box
-              sx={{
-                height: { xs: 350, md: 420 },
-                pb: { xs: 3, md: 4 },           /* space below grid/axes */
-                overflow: 'hidden',             /* ensure no horizontal bleed */
+          <Box sx={{ position: 'relative', borderRadius: 2, mb: 4 }}>
+            <GlowingEffect disabled={false} proximity={100} spread={30} glow={true} />
+            <Paper 
+              elevation={3} 
+              sx={{ 
+                p: 3, 
+                borderRadius: 2,
+                background: 'rgba(30, 41, 59, 0.5)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
               }}
             >
-              <CompoundInterestChart 
-                yearlyData={yearlyData} 
-                chartType={chartType} 
-                annualRate={annualRate} 
-              />
-            </Box>
-          </Paper>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Investeringsvækst over Tid
+                </Typography>
+                
+                <ToggleButtonGroup
+                  value={chartType}
+                  exclusive
+                  onChange={handleChartTypeChange}
+                  size="small"
+                >
+                  <ToggleButton value="line" aria-label="line chart">
+                    <Tooltip title="Linjediagram">
+                      <ShowChartIcon fontSize="small" />
+                    </Tooltip>
+                  </ToggleButton>
+                  <ToggleButton value="stacked" aria-label="stacked bar chart">
+                    <Tooltip title="Søjlediagram">
+                      <BarChartIcon fontSize="small" />
+                    </Tooltip>
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </Box>
+              
+              {/* Chart wrapper – extra bottom padding & taller mobile height to avoid overflow */}
+              <Box
+                sx={{
+                  height: { xs: 350, md: 420 },
+                  pb: { xs: 4, md: 5 },           /* increased space below grid/axes */
+                  overflow: 'hidden',             /* ensure no horizontal bleed */
+                }}
+              >
+                <CompoundInterestChart 
+                  yearlyData={yearlyData} 
+                  chartType={chartType} 
+                  annualRate={annualRate}
+                  totalInterest={totalInterest} 
+                />
+              </Box>
+            </Paper>
+          </Box>
           
           {/* Data Table */}
-          <Paper 
-            elevation={3} 
-            sx={{ 
-              borderRadius: 2,
-              background: 'rgba(30, 41, 59, 0.5)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              overflow: 'hidden'
-            }}
-          >
-            <Box sx={{ p: 3, pb: 1 }}>
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                Årlig Oversigt
-              </Typography>
-            </Box>
-            
-            <TableContainer sx={{ maxHeight: 400 }}>
-              <Table stickyHeader size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>År</TableCell>
-                    <TableCell align="right">Startbalance</TableCell>
-                    <TableCell align="right">Bidrag</TableCell>
-                    <TableCell align="right">Renter</TableCell>
-                    <TableCell align="right">Slutbalance</TableCell>
-                    <TableCell align="right">Total Investeret</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {yearlyData.map((row) => (
-                    <TableRow key={row.year} hover>
-                      <TableCell component="th" scope="row">
-                        {row.year}
-                      </TableCell>
-                      <TableCell align="right">{formatDKK(row.startBalance)}</TableCell>
-                      <TableCell align="right">{formatDKK(row.contribution)}</TableCell>
-                      <TableCell align="right">{formatDKK(row.interest)}</TableCell>
-                      <TableCell align="right">{formatDKK(row.endBalance)}</TableCell>
-                      <TableCell align="right">{formatDKK(row.totalContributed)}</TableCell>
+          <Box sx={{ position: 'relative', borderRadius: 2 }}>
+            <GlowingEffect disabled={false} proximity={100} spread={30} glow={true} />
+            <Paper 
+              elevation={3} 
+              sx={{ 
+                borderRadius: 2,
+                background: 'rgba(30, 41, 59, 0.5)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                overflow: 'hidden'
+              }}
+            >
+              <Box sx={{ p: 3, pb: 1 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Årlig Oversigt
+                </Typography>
+              </Box>
+              
+              <TableContainer sx={{ maxHeight: 400 }}>
+                <Table stickyHeader size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>År</TableCell>
+                      <TableCell align="right">Startbalance</TableCell>
+                      <TableCell align="right">Bidrag</TableCell>
+                      <TableCell align="right">Renter</TableCell>
+                      <TableCell align="right">Total Investeret</TableCell>
+                      <TableCell align="right">Slutbalance</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
+                  </TableHead>
+                  <TableBody>
+                    {yearlyData.map((row) => (
+                      <TableRow key={row.year} hover>
+                        <TableCell component="th" scope="row">
+                          {row.year}
+                        </TableCell>
+                        <TableCell align="right">{formatDKK(row.startBalance)}</TableCell>
+                        <TableCell align="right">{formatDKK(row.contribution)}</TableCell>
+                        <TableCell align="right">{formatDKK(row.interest)}</TableCell>
+                        <TableCell align="right">{formatDKK(row.totalContributed)}</TableCell>
+                        <TableCell align="right">{formatDKK(row.endBalance)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+          </Box>
         </Box>
       </Box>
     </Container>

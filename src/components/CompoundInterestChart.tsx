@@ -57,6 +57,7 @@ interface CompoundInterestChartProps {
   yearlyData: YearlyData[]
   chartType: 'line' | 'stacked'
   annualRate: number
+  totalInterest: number
 }
 
 // Helper function to calculate data with different rates
@@ -101,7 +102,12 @@ const calculateCumulativeReturn = (endBalance: number, totalContributed: number)
   return ((endBalance - totalContributed) / totalContributed) * 100;
 };
 
-const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundInterestChartProps) => {
+const CompoundInterestChart = ({
+  yearlyData,
+  chartType,
+  annualRate,
+  totalInterest,
+}: CompoundInterestChartProps) => {
   const chartRef = useRef<ChartJS>(null)
   const theme = useTheme()
 
@@ -171,6 +177,18 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
       // Reference lines - only shown in line chart
       ...(chartType === 'line' ? [
         {
+          label: `${refRate3.toFixed(1)}%`,
+          data: refData3,
+          // Switched to purple
+          borderColor: '#9c27b0',
+          backgroundColor: 'transparent',
+          tension: 0.3,
+          pointRadius: 3,
+          pointHoverRadius: 6,
+          borderWidth: 1.5,
+          borderDash: [3, 3],
+        },
+        {
           label: `${refRate1.toFixed(1)}%`,
           data: refData1,
           borderColor: theme.palette.warning.main, // Yellow
@@ -185,18 +203,6 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
           label: `${refRate2.toFixed(1)}%`,
           data: refData2,
           borderColor: theme.palette.info.main, // Blue
-          backgroundColor: 'transparent',
-          tension: 0.3,
-          pointRadius: 3,
-          pointHoverRadius: 6,
-          borderWidth: 1.5,
-          borderDash: [3, 3],
-        },
-        {
-          label: `${refRate3.toFixed(1)}%`,
-          data: refData3,
-          // Switched to purple
-          borderColor: '#9c27b0',
           backgroundColor: 'transparent',
           tension: 0.3,
           pointRadius: 3,
@@ -329,7 +335,7 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
         left: 0,
         right: 20,
         top: 0,
-        bottom: 30, // extra bottom padding so rotated labels aren't clipped
+        bottom: 50, // increased bottom padding so rotated labels aren't clipped
       },
     },
     scales: {
@@ -430,19 +436,22 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
 
   return (
     <Box sx={{ width: '100%', height: '100%', minHeight: '400px' }}>
-      {/* Chart title with subtitle showing total return percentage */}
+      {/* Stats section – left-aligned under chart title within card */}
       {chartType === 'line' && (
-        <Typography 
-          variant="subtitle2" 
-          align="center" 
-          sx={{ 
-            color: theme.palette.success.main, 
-            mb: 2,
-            fontWeight: 'medium'
-          }}
-        >
-          Total Procent Optjent: {finalReturnPercentage.toFixed(1)}%
-        </Typography>
+        <Box sx={{ mb: 2 }}>
+          <Typography
+            variant="subtitle2"
+            sx={{ fontWeight: 600, color: theme.palette.text.secondary }}
+          >
+            Total Procent Optjent: {finalReturnPercentage.toFixed(1)}%
+          </Typography>
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: 'bold', color: theme.palette.success.main }}
+          >
+            {formatDKK(totalInterest)}
+          </Typography>
+        </Box>
       )}
       
       {chartType === 'line' ? (
