@@ -21,11 +21,15 @@ import {
   TableRow,
   Tooltip,
   IconButton,
-  useTheme
+  Button,
+  useTheme,
+  useMediaQuery
 } from "@mui/material"
 import InfoIcon from "@mui/icons-material/Info"
 import ShowChartIcon from "@mui/icons-material/ShowChart"
 import BarChartIcon from "@mui/icons-material/BarChart"
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore"
+import NavigateNextIcon from "@mui/icons-material/NavigateNext"
 import CompoundInterestChart from "@/components/CompoundInterestChart"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 
@@ -100,6 +104,14 @@ export default function Calculator() {
   // Chart display state
   const [chartType, setChartType] = useState<'line' | 'stacked'>('line');
   
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(3);
+  
+  // Responsive detection
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  
   // Validation state
   const [errors, setErrors] = useState({
     principal: false,
@@ -167,6 +179,35 @@ export default function Calculator() {
   const totalInterest = finalBalance - totalContributed;
   const interestPercentage = totalContributed > 0 ? (totalInterest / totalContributed) * 100 : 0;
   
+  // Calculate paginated data
+  const paginatedData = useMemo(() => {
+    if (!isMobile && !isTablet) {
+      return yearlyData; // Show all data on desktop
+    }
+    
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return yearlyData.slice(startIndex, startIndex + itemsPerPage);
+  }, [yearlyData, currentPage, itemsPerPage, isMobile, isTablet]);
+  
+  // Calculate total pages
+  const totalPages = useMemo(() => {
+    return Math.ceil(yearlyData.length / itemsPerPage);
+  }, [yearlyData, itemsPerPage]);
+  
+  // Update items per page based on screen size
+  useEffect(() => {
+    if (isMobile) {
+      setItemsPerPage(3); // Show 3 years on mobile
+    } else if (isTablet) {
+      setItemsPerPage(5); // Show 5 years on tablet
+    } else {
+      setItemsPerPage(yearlyData.length); // Show all on desktop
+    }
+    
+    // Reset to first page when screen size changes
+    setCurrentPage(1);
+  }, [isMobile, isTablet, yearlyData.length]);
+  
   // Input validation
   useEffect(() => {
     const newErrors = {
@@ -230,6 +271,15 @@ export default function Calculator() {
     if (newChartType !== null) {
       setChartType(newChartType);
     }
+  };
+  
+  // Pagination handlers
+  const handleNextPage = () => {
+    setCurrentPage(prev => Math.min(prev + 1, totalPages));
+  };
+  
+  const handlePrevPage = () => {
+    setCurrentPage(prev => Math.max(prev - 1, 1));
   };
   
   // Render reference values for comparison
@@ -727,16 +777,16 @@ export default function Calculator() {
                 <Table stickyHeader size="small">
                   <TableHead>
                   <TableRow>
-  <TableCell sx={{ backgroundColor: '#000B24', color: 'white' }}>År</TableCell>
-  <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Startbalance</TableCell>
-  <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Bidrag</TableCell>
-  <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Renter</TableCell>
-  <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Total Investeret</TableCell>
-  <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Slutbalance</TableCell>
-</TableRow>
+                    <TableCell sx={{ backgroundColor: '#000B24', color: 'white' }}>År</TableCell>
+                    <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Startbalance</TableCell>
+                    <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Bidrag</TableCell>
+                    <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Renter</TableCell>
+                    <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Total Investeret</TableCell>
+                    <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Slutbalance</TableCell>
+                  </TableRow>
                   </TableHead>
                   <TableBody>
-                    {yearlyData.map((row) => (
+                    {paginatedData.map((row) => (
                       <TableRow key={row.year} hover>
                         <TableCell component="th" scope="row">
                           {row.year}
@@ -751,6 +801,43 @@ export default function Calculator() {
                   </TableBody>
                 </Table>
               </TableContainer>
+              
+              {/* Pagination controls - only show on mobile/tablet */}
+              {(isMobile || isTablet) && (
+                <Box sx={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center', 
+                  p: 2, 
+                  borderTop: '1px solid rgba(255, 255, 255, 0.1)' 
+                }}>
+                  <Button 
+                    variant="outlined" 
+                    size="small" 
+                    onClick={handlePrevPage} 
+                    disabled={currentPage <= 1}
+                    startIcon={<NavigateBeforeIcon />}
+                    sx={{ minWidth: '100px' }}
+                  >
+                    Forrige
+                  </Button>
+                  
+                  <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                    {`${(currentPage - 1) * itemsPerPage + 1}-${Math.min(currentPage * itemsPerPage, yearlyData.length)} af ${yearlyData.length} år`}
+                  </Typography>
+                  
+                  <Button 
+                    variant="outlined" 
+                    size="small" 
+                    onClick={handleNextPage} 
+                    disabled={currentPage >= totalPages}
+                    endIcon={<NavigateNextIcon />}
+                    sx={{ minWidth: '100px' }}
+                  >
+                    Næste
+                  </Button>
+                </Box>
+              )}
             </Paper>
           </Box>
         </Box>

@@ -68,7 +68,7 @@ const Navigation = () => {
       elevation={0}
       suppressHydrationWarning
       sx={{
-        backgroundColor: "black",
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
         /* Keep blur always on and static to avoid flashing */
         backdropFilter: "blur(8px)",
         transition: "background-color 0.3s ease",
