@@ -313,7 +313,7 @@ export default function Home() {
             <Typography
               variant="h5"
               component="h2"
-              className="mb-6 text-white"
+              className="mb-16 text-white"
               sx={{ fontWeight: 700 }}
             >
               Start Din Rejse Mod Økonomisk Frihed
