@@ -227,7 +227,7 @@ export default function Home() {
             sx={{ 
               backgroundColor: 'rgba(255, 255, 255, 0.9)',
               backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(0,0,0,0.1)',
+              border: '1px solid rgba(255, 215, 0, 0.8)', // thin golden border
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
             }}
           >
