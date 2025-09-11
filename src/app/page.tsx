@@ -72,7 +72,7 @@ export default function Home() {
         <Container maxWidth="md">
           <Paper 
             elevation={24}
-            className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
+            className="pt-8 sm:pt-12 px-8 sm:px-12 pb-4 backdrop-blur-md rounded-xl mb-12"
             sx={{ 
               background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
               backdropFilter: 'blur(10px)',
