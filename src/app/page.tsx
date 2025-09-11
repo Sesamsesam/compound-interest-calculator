@@ -2,6 +2,7 @@
 
 import { Container, Typography, Button, Box, Paper } from "@mui/material"
 import { ParticleTextEffect } from "@/components/ParticleTextEffect"
+import { WebGLShader } from "@/components/ui/web-gl-shader"
 import CalculateIcon from "@mui/icons-material/Calculate"
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote"
@@ -11,6 +12,10 @@ import Image from "next/image"
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Fixed rainbow WebGL background behind all content */}
+      <div className="fixed inset-0 -z-10">
+        <WebGLShader />
+      </div>
       {/* Hero Section with Particle Effect - Full Width */}
       <section className="w-full overflow-hidden p-0 m-0 relative">
         {/* Logo overlay */}

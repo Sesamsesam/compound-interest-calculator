@@ -283,8 +283,9 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     const particles = particlesRef.current
 
     // Background with motion blur
-    ctx.fillStyle = "rgba(0, 0, 0, 0.1)"
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    // Clear the canvas completely so underlying layers (e.g. WebGL rainbow)
+    // remain visible. This makes the particle layer fully transparent.
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // Update and draw particles
     for (let i = particles.length - 1; i >= 0; i--) {
@@ -383,7 +384,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
   }, [words]) // Add words to dependency array to ensure nextWord uses the latest words prop
 
   return (
-    <div className="w-full bg-black">
+    <div className="w-full">
       <canvas
         ref={canvasRef}
         className="w-full h-auto"
