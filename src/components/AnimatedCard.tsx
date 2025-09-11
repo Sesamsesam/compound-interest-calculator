@@ -59,18 +59,8 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
 
   // Determine initial transform based on animation direction
   const getInitialTransform = () => {
-    switch (direction) {
-      case 'up':
-        return `translateY(${distance}px)`;
-      case 'down':
-        return `translateY(-${distance}px)`;
-      case 'left':
-        return `translateX(${distance}px)`;
-      case 'right':
-        return `translateX(-${distance}px)`;
-      default:
-        return `translateY(${distance}px)`;
-    }
+    /* No slide – keep element stationary for a pure fade-in effect */
+    return 'none';
   };
 
   // Combine refs
@@ -88,12 +78,10 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
       className={className}
       sx={{
         opacity: isVisible ? 1 : 0,
-        transform: isVisible 
-          ? transform || 'none' 
-          : getInitialTransform(),
+        /* Keep transform only for tilt / hover (no initial slide) */
+        transform: isVisible ? transform || 'none' : 'none',
         transition: `
           opacity ${duration}s ease-out ${delay}s,
-          transform ${duration}s ease-out ${delay}s,
           box-shadow 0.3s ease,
           filter 0.3s ease
         `,

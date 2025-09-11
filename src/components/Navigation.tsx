@@ -64,17 +64,44 @@ const Navigation = () => {
   return (
     <AppBar 
       position="sticky" 
-      elevation={mounted && scrolled ? 4 : 0}
+      /* Keep elevation constant to avoid white flash during scroll */
+      elevation={0}
       suppressHydrationWarning
       sx={{
         backgroundColor: "black",
-        backdropFilter: mounted && scrolled ? "blur(8px)" : "none",
-        transition: "all 0.3s ease",
-        borderBottom: mounted && scrolled ? "1px solid rgba(255, 255, 255, 0.1)" : "none",
+        /* Keep blur always on and static to avoid flashing */
+        backdropFilter: "blur(8px)",
+        transition: "background-color 0.3s ease",
+        /* Always show subtle bottom border – no transition to prevent flicker */
+        borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
       }}
     >
       <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ justifyContent: "center" }}>
+        <Toolbar 
+          disableGutters 
+          sx={{ 
+            display: "flex", 
+            justifyContent: "space-between",
+            position: "relative"
+          }}
+        >
+          {/* Company Name - Left Side - Hidden on mobile */}
+          <Typography
+            variant="subtitle2"
+            sx={{
+              display: { xs: "none", md: "block" },
+              color: "rgba(255, 255, 255, 0.8)",
+              fontWeight: 500,
+              letterSpacing: "0.05em",
+              fontSize: "0.75rem",
+              position: "absolute",
+              left: 0,
+              textTransform: "uppercase"
+            }}
+          >
+            CPH TRADING ACADEMY
+          </Typography>
+
           {/* Desktop Navigation - Centered */}
           <Box 
             sx={{ 

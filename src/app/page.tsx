@@ -31,24 +31,16 @@ export default function Home() {
         <WebGLShader />
       </div>
       {/* Hero Section with Particle Effect - Full Width */}
-      <section className="w-full overflow-hidden p-0 m-0 relative">
-        {/* Logo overlay */}
-        <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-10">
-          <Image 
-            src="/CPH_Trading_Academy_Logo-B2-removebg-preview.png" 
-            alt="Copenhagen Trading Academy Logo" 
-            width={120}
-            height={60}
-            className="w-[120px] sm:w-[200px]"
-            // Responsive sizing
-          />
-        </div>
+      {/*  h-[70vh] on mobile keeps hero compact, lg:min-h-screen gives full viewport on desktop  */}
+      <section className="w-full overflow-hidden p-0 m-0 relative h-[70vh] lg:min-h-screen">
         <ParticleTextEffect words={["Byg Formue", "Renters Rente", "Det 8. Vidunder"]} />
         {/* Hero CTA Button (overlay at bottom-center of hero) */}
         {/* Adjusted positioning for equal spacing above and below */}
         <Box
           className="absolute left-1/2 -translate-x-1/2 z-10"
-          style={{ bottom: '70px' }} // Slightly higher on mobile
+          /* Position the CTA higher: ~25 % of hero height from the bottom.
+             Keeps good spacing on desktop while remaining sensible on mobile. */
+          style={{ bottom: '25%' }}
         >
           <Button
             variant="contained"
@@ -79,7 +71,8 @@ export default function Home() {
       </section>
 
       {/* Einstein Quote Section - Moved to be first after hero */}
-      <section>
+      {/*  Push further below fold on desktop (lg:mt-32) but keep normal spacing on mobile (mt-8) */}
+      <section className="mt-8 lg:mt-32">
         <Container maxWidth="md">
           <AnimatedCard delay={0.1} direction="up">
             <Paper 
@@ -146,10 +139,12 @@ export default function Home() {
       {/* 7% and Tid er Din Ven Cards - Moved to be second after hero */}
       <section>
         <Container maxWidth="md">
-          <Box className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
+          {/* items-stretch forces children to same height */}
+          <Box className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12 items-stretch">
             <AnimatedCard delay={0.2} direction="left">
               <Paper 
-                className="p-4 sm:p-6 backdrop-blur-sm rounded-xl"
+                /* h-full makes this card stretch to full row height */
+                className="p-4 sm:p-6 backdrop-blur-sm rounded-xl h-full"
                 sx={{ 
                   background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
                   backdropFilter: 'blur(10px)',
@@ -175,13 +170,14 @@ export default function Home() {
                     className="text-white"
                     sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
                   >
-                    5.000 kr/md over 20 år bliver til <strong>
-                      <AnimatedCounter 
-                        value={13441535} 
-                        prefix="" 
-                        suffix=" kr" 
-                        gradientText={true} 
-                        duration={2500}
+                    5.000 kr/md over 20 år bliver til{" "}
+                    <strong className="font-extrabold text-lg sm:text-xl md:text-2xl">
+                      <AnimatedCounter
+                        value={13441535}
+                        prefix=""
+                        suffix=" kr"
+                        gradientText={true}
+                        duration={1500}
                         delay={300}
                         useEasing={true}
                         formatter={(value) => value.toLocaleString('da-DK')}
@@ -194,7 +190,8 @@ export default function Home() {
             
             <AnimatedCard delay={0.2} direction="right">
               <Paper 
-                className="p-4 sm:p-6 backdrop-blur-sm rounded-xl"
+                /* h-full makes this card stretch to full row height */
+                className="p-4 sm:p-6 backdrop-blur-sm rounded-xl h-full"
                 sx={{ 
                   background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
                   backdropFilter: 'blur(10px)',
