@@ -14,7 +14,7 @@ export default function Home() {
       {/* Hero Section with Particle Effect - Full Width */}
       <section className="w-full overflow-hidden p-0 m-0 relative">
         {/* Logo overlay */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute top-4 left-4 z-10">
           <Image 
             src="/CPH_Trading_Academy_Logo-B2-removebg-preview.png" 
             alt="Copenhagen Trading Academy Logo" 
@@ -26,18 +26,26 @@ export default function Home() {
         <ParticleTextEffect words={["Byg Formue", "Renters Rente", "Det 8. Vidunder"]} />
       </section>
 
-      {/* Hero Content Section */}
+      {/* Hero Content Section - Now in a Card */}
       <section className="py-12 bg-gradient-to-b from-slate-900 to-slate-800">
-        <Container maxWidth="lg">
-          <Box className="flex flex-col items-center justify-center text-center">
+        <Container maxWidth="md">
+          <Paper 
+            elevation={24}
+            className="p-8 sm:p-12 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl"
+            sx={{ 
+              background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8))',
+              backdropFilter: 'blur(10px)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            }}
+          >
             <Typography 
               variant="h6" 
-              className="text-slate-300 max-w-2xl mx-auto"
+              className="text-slate-300 mx-auto text-center"
               sx={{ fontWeight: 400 }}
             >
               Oplev hvordan små, regelmæssige investeringer kan vokse til betydelige formuer over tid med renters rente effekten.
             </Typography>
-          </Box>
+          </Paper>
         </Container>
       </section>
 
@@ -99,142 +107,114 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* Story Section */}
+      {/* Story Section - Restructured to Single Column */}
       <section className="py-20 bg-gradient-to-b from-slate-800 to-slate-900">
-        <Container maxWidth="lg">
-          <Box className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <Box>
-              <Typography 
-                variant="h3" 
-                component="h2" 
-                className="mb-6 text-white"
-                sx={{ 
-                  fontWeight: 700,
-                  mb: 4,
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    bottom: -10,
-                    left: 0,
-                    width: 80,
-                    height: 4,
-                    backgroundColor: 'primary.main',
-                    borderRadius: 2
-                  }
-                }}
-              >
-                Styrken ved Renters Rente
-              </Typography>
-              
-              <Typography paragraph className="text-slate-300 mb-4">
-                Renters rente er det finansielle fænomen, hvor du ikke kun tjener renter på din oprindelige investering, men også på de renter, du allerede har optjent.
-              </Typography>
-              
-              <Typography paragraph className="text-slate-300 mb-4">
-                Over tid kan denne effekt føre til eksponentiel vækst af din formue. Jo længere din investeringshorisont er, desto mere dramatisk bliver effekten.
-              </Typography>
-              
-              <Typography paragraph className="text-slate-300 mb-4">
-                Selv små månedlige bidrag kan vokse til betydelige summer over årtier, især når de investeres med konsistente afkast.
-              </Typography>
-              
-              <Typography paragraph className="text-slate-300">
-                Vores beregner giver dig mulighed for at visualisere denne vækst og forstå, hvordan forskellige afkastrater og investeringsperioder kan påvirke din økonomiske fremtid.
-              </Typography>
-            </Box>
+        <Container maxWidth="md">
+          {/* Styrken ved Renters Rente Card */}
+          <Paper 
+            elevation={24}
+            className="p-8 sm:p-12 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl mb-12"
+            sx={{ 
+              background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8))',
+              backdropFilter: 'blur(10px)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            }}
+          >
+            <Typography 
+              variant="h3" 
+              component="h2" 
+              className="mb-6 text-white text-center"
+              sx={{ 
+                fontWeight: 700,
+                mb: 4,
+                position: 'relative',
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: -10,
+                  left: 'calc(50% - 40px)',
+                  width: 80,
+                  height: 4,
+                  backgroundColor: 'primary.main',
+                  borderRadius: 2
+                }
+              }}
+            >
+              Styrken ved Renters Rente
+            </Typography>
             
-            <Box className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <Paper 
-                className="p-6 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl"
-                sx={{ 
-                  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)'
-                  }
-                }}
-              >
-                <Box className="flex flex-col items-center text-center">
-                  <TrendingUpIcon 
-                    sx={{ 
-                      fontSize: 48, 
-                      color: 'warning.main',
-                      mb: 2
-                    }} 
-                  />
-                  <Typography variant="h6" className="mb-2 text-white font-bold">
-                    7% Årligt Afkast
-                  </Typography>
-                  <Typography className="text-slate-300">
-                    5.000 kr/md over 20 år bliver til <strong className="text-yellow-400">2.631.910 kr</strong>
-                  </Typography>
-                </Box>
-              </Paper>
-              
-              <Paper 
-                className="p-6 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl"
-                sx={{ 
-                  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)'
-                  }
-                }}
-              >
-                <Box className="flex flex-col items-center text-center">
-                  <TrendingUpIcon 
-                    sx={{ 
-                      fontSize: 48, 
-                      color: 'success.main',
-                      mb: 2
-                    }} 
-                  />
-                  <Typography variant="h6" className="mb-2 text-white font-bold">
-                    Tid er Din Ven
-                  </Typography>
-                  <Typography className="text-slate-300">
-                    Jo tidligere du starter, desto mere dramatisk bliver væksten af din investering.
-                  </Typography>
-                </Box>
-              </Paper>
-              
-              <Paper 
-                className="p-6 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:col-span-2"
-                sx={{ 
-                  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)'
-                  }
-                }}
-              >
-                <Box className="flex flex-col items-center text-center">
-                  <CalculateIcon 
-                    sx={{ 
-                      fontSize: 48, 
-                      color: 'primary.main',
-                      mb: 2
-                    }} 
-                  />
-                  <Typography variant="h6" className="mb-2 text-white font-bold">
-                    Se Din Egen Vækst
-                  </Typography>
-                  <Typography className="text-slate-300 mb-4">
-                    Brug vores beregner til at se, hvordan dine egne investeringer kan vokse over tid.
-                  </Typography>
-                  <Button 
-                    variant="outlined" 
-                    color="primary"
-                    component={Link}
-                    href="/calculator"
-                    size="large"
-                  >
-                    Gå til Beregneren
-                  </Button>
-                </Box>
-              </Paper>
-            </Box>
+            <Typography paragraph className="text-slate-300 mb-4">
+              Renters rente er det finansielle fænomen, hvor du ikke kun tjener renter på din oprindelige investering, men også på de renter, du allerede har optjent.
+            </Typography>
+            
+            <Typography paragraph className="text-slate-300 mb-4">
+              Over tid kan denne effekt føre til eksponentiel vækst af din formue. Jo længere din investeringshorisont er, desto mere dramatisk bliver effekten.
+            </Typography>
+            
+            <Typography paragraph className="text-slate-300 mb-4">
+              Selv små månedlige bidrag kan vokse til betydelige summer over årtier, især når de investeres med konsistente afkast.
+            </Typography>
+            
+            <Typography paragraph className="text-slate-300">
+              Vores beregner giver dig mulighed for at visualisere denne vækst og forstå, hvordan forskellige afkastrater og investeringsperioder kan påvirke din økonomiske fremtid.
+            </Typography>
+          </Paper>
+          
+          {/* 7% and Tid er Din Ven Cards - Side by Side but in Single Column Flow */}
+          <Box className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <Paper 
+              className="p-6 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl"
+              sx={{ 
+                transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-8px)',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)'
+                }
+              }}
+            >
+              <Box className="flex flex-col items-center text-center">
+                <TrendingUpIcon 
+                  sx={{ 
+                    fontSize: 48, 
+                    color: 'warning.main',
+                    mb: 2
+                  }} 
+                />
+                <Typography variant="h6" className="mb-2 text-white font-bold">
+                  7% Årligt Afkast
+                </Typography>
+                <Typography className="text-slate-300">
+                  5.000 kr/md over 20 år bliver til <strong className="text-yellow-400">2.631.910 kr</strong>
+                </Typography>
+              </Box>
+            </Paper>
+            
+            <Paper 
+              className="p-6 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl"
+              sx={{ 
+                transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-8px)',
+                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)'
+                }
+              }}
+            >
+              <Box className="flex flex-col items-center text-center">
+                <TrendingUpIcon 
+                  sx={{ 
+                    fontSize: 48, 
+                    color: 'success.main',
+                    mb: 2
+                  }} 
+                />
+                <Typography variant="h6" className="mb-2 text-white font-bold">
+                  Tid er Din Ven
+                </Typography>
+                <Typography className="text-slate-300">
+                  Jo tidligere du starter, desto mere dramatisk bliver væksten af din investering.
+                </Typography>
+              </Box>
+            </Paper>
           </Box>
         </Container>
       </section>
