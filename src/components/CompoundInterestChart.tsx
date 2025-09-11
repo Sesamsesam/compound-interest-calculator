@@ -58,6 +58,22 @@ interface CompoundInterestChartProps {
   annualRate: number
 }
 
+// Helper function to calculate data with different rates
+const calculateWithRate = (principal: number, monthlyContribution: number, rate: number, years: number): number[] => {
+  const result: number[] = [principal];
+  let balance = principal;
+  
+  for (let year = 1; year <= years; year++) {
+    // Add annual contribution
+    balance += monthlyContribution * 12;
+    // Add interest
+    balance *= (1 + rate / 100);
+    result.push(balance);
+  }
+  
+  return result;
+};
+
 const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundInterestChartProps) => {
   const chartRef = useRef<ChartJS>(null)
   const theme = useTheme()
@@ -72,21 +88,34 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
   const contributions = yearlyData.map(data => data.contribution)
   const interests = yearlyData.map(data => data.interest)
   const cumulativeContributions = yearlyData.map(data => data.totalContributed)
+  
+  // Calculate reference data for +5%, +10%, +15% rates
+  const principal = yearlyData[0].endBalance;
+  const monthlyContribution = yearlyData.length > 1 ? yearlyData[1].contribution / 12 : 0;
+  const totalYears = yearlyData.length - 1;
+  
+  const refRate1 = annualRate + 5;
+  const refRate2 = annualRate + 10;
+  const refRate3 = annualRate + 15;
+  
+  const refData1 = calculateWithRate(principal, monthlyContribution, refRate1, totalYears);
+  const refData2 = calculateWithRate(principal, monthlyContribution, refRate2, totalYears);
+  const refData3 = calculateWithRate(principal, monthlyContribution, refRate3, totalYears);
 
   // Line chart data
   const lineChartData: ChartData<'line'> = {
     labels: years,
     datasets: [
       {
-        label: 'Slutbalance',
+        label: 'Din slut balance',
         data: endBalances,
-        borderColor: theme.palette.primary.main,
-        backgroundColor: `${theme.palette.primary.main}33`, // 20% opacity
+        borderColor: '#9c27b0', // Purple color
+        backgroundColor: 'rgba(156, 39, 176, 0.2)', // Purple with opacity
         fill: true,
         tension: 0.3,
         pointRadius: 3,
         pointHoverRadius: 6,
-        pointBackgroundColor: theme.palette.primary.main,
+        pointBackgroundColor: '#9c27b0',
         borderWidth: 2,
       },
       {
@@ -98,7 +127,43 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
         tension: 0.1,
         pointRadius: 0,
         borderWidth: 2,
-      }
+      },
+      // Reference lines - only shown in line chart
+      ...(chartType === 'line' ? [
+        {
+          label: `+5% → ${refRate1.toFixed(1)}%`,
+          data: refData1,
+          borderColor: theme.palette.warning.main, // Yellow
+          backgroundColor: 'transparent',
+          tension: 0.3,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          borderWidth: 1.5,
+          borderDash: [3, 3],
+        },
+        {
+          label: `+10% → ${refRate2.toFixed(1)}%`,
+          data: refData2,
+          borderColor: theme.palette.info.main, // Blue
+          backgroundColor: 'transparent',
+          tension: 0.3,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          borderWidth: 1.5,
+          borderDash: [3, 3],
+        },
+        {
+          label: `+15% → ${refRate3.toFixed(1)}%`,
+          data: refData3,
+          borderColor: theme.palette.success.main, // Green
+          backgroundColor: 'transparent',
+          tension: 0.3,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          borderWidth: 1.5,
+          borderDash: [3, 3],
+        }
+      ] : [])
     ],
   }
 
@@ -172,9 +237,11 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
             const value = context.raw as number;
             
             if (chartType === 'line') {
-              if (label === 'Slutbalance') {
+              if (label === 'Din slut balance') {
                 return `${label}: ${formatDKK(value)}`;
               } else if (label === 'Indbetalinger') {
+                return `${label}: ${formatDKK(value)}`;
+              } else if (label.includes('%')) {
                 return `${label}: ${formatDKK(value)}`;
               }
             } else {

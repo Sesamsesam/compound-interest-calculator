@@ -43,19 +43,42 @@ const formatDKK = (value: number): string => {
   return new Intl.NumberFormat('da-DK', {
     style: 'currency',
     currency: 'DKK',
+    // Always round to the nearest whole krone – no decimals
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 0
   }).format(value);
 }
+
+// Short Danish currency formatter (e.g., 5.2M kr, 25.9K kr)
+const formatShortDKK = (value: number): string => {
+  const abs = Math.abs(value);
+  let formatted: string;
+
+  if (abs >= 1_000_000_000) {
+    formatted = `${(value / 1_000_000_000).toFixed(1)}B`;
+  } else if (abs >= 1_000_000) {
+    formatted = `${(value / 1_000_000).toFixed(1)}M`;
+  } else if (abs >= 1_000) {
+    formatted = `${(value / 1_000).toFixed(1)}K`;
+  } else {
+    // For values under 1 000, round to whole numbers (no decimals)
+    formatted = value.toFixed(0);
+  }
+
+  return `${formatted} kr`;
+};
 
 export default function Calculator() {
   const theme = useTheme();
   
   // Input state with default values
+  /* All inputs start at 0 but render as empty strings so the
+     user can immediately type without back-spacing. */
   const [principal, setPrincipal] = useState<number>(0);
-  const [monthlyContribution, setMonthlyContribution] = useState<number>(2000);
-  const [annualRate, setAnnualRate] = useState<number>(7);
-  const [years, setYears] = useState<number>(5);
+  const [monthlyContribution, setMonthlyContribution] = useState<number>(0);
+  const [annualRate, setAnnualRate] = useState<number>(0);
+  // Default to 1 year and never allow below 1
+  const [years, setYears] = useState<number>(1);
   
   // Chart display state
   const [chartType, setChartType] = useState<'line' | 'stacked'>('line');
@@ -140,23 +163,27 @@ export default function Calculator() {
   
   // Handle input changes
   const handlePrincipalChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(event.target.value);
+    const raw = event.target.value;
+    const value = raw === "" ? 0 : parseFloat(raw);
     setPrincipal(isNaN(value) ? 0 : value);
   };
   
   const handleMonthlyContributionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(event.target.value);
+    const raw = event.target.value;
+    const value = raw === "" ? 0 : parseFloat(raw);
     setMonthlyContribution(isNaN(value) ? 0 : value);
   };
   
   const handleAnnualRateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(event.target.value);
+    const raw = event.target.value;
+    const value = raw === "" ? 0 : parseFloat(raw);
     setAnnualRate(isNaN(value) ? 0 : value);
   };
   
   const handleYearsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(event.target.value);
-    setYears(isNaN(value) ? 1 : value);
+    const raw = event.target.value;
+    const value = raw === "" ? 0 : parseInt(raw);
+    setYears(isNaN(value) || value < 1 ? 1 : value);
   };
   
   const handleSliderChange = (name: string) => (event: Event, newValue: number | number[]) => {
@@ -190,68 +217,55 @@ export default function Calculator() {
   
   // Render reference values for comparison
   const renderReferenceValues = () => {
-    // Calculate values for 7%, 20%, and 30% returns using the same principal and monthly contribution
-    const sevenPercent = calculateYearlyData(principal, monthlyContribution, 7, years)[years].endBalance;
-    const twentyPercent = calculateYearlyData(principal, monthlyContribution, 20, years)[years].endBalance;
-    const thirtyPercent = calculateYearlyData(principal, monthlyContribution, 30, years)[years].endBalance;
+    // Dynamically calculate values for +5 %, +10 %, +15 % over current annualRate
+    const refRates = [annualRate + 5, annualRate + 10, annualRate + 15];
+    const refBalances = refRates.map(
+      (rate) => calculateYearlyData(principal, monthlyContribution, rate, years)[years].endBalance
+    );
     
     return (
       <Box sx={{ mt: 2 }}>
         <Box sx={{ mb: 1 }}>
           <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-            Reference Values (same inputs with different rates)
+            Reference Værdier Slutbalance
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-          <Box sx={{ flex: '1 1 calc(33.333% - 16px)', minWidth: '120px' }}>
+          {refBalances.map((balance, idx) => (
+            <Box key={idx} sx={{ flex: '1 1 calc(33.333% - 16px)', minWidth: '120px' }}>
             <Paper 
               sx={{ 
                 p: 1, 
                 textAlign: 'center',
                 border: '1px solid',
-                borderColor: theme.palette.warning.main,
-                bgcolor: 'rgba(234, 179, 8, 0.1)'
+                borderColor: idx === 0
+                  ? theme.palette.warning.main
+                  : idx === 1
+                  ? theme.palette.info.main
+                  : theme.palette.success.main,
+                bgcolor: idx === 0
+                  ? 'rgba(234, 179, 8, 0.1)'
+                  : idx === 1
+                  ? 'rgba(59, 130, 246, 0.1)'
+                  : 'rgba(34, 197, 94, 0.1)'
               }}
             >
-              <Typography variant="caption" display="block">7% Return</Typography>
-              <Typography variant="body2" fontWeight="bold">{formatDKK(sevenPercent)}</Typography>
+              <Typography variant="caption" display="block">
+                {`+${(idx + 1) * 5}% → ${(refRates[idx]).toFixed(1)}%`}
+              </Typography>
+              <Typography variant="body2" fontWeight="bold">
+                {formatShortDKK(balance)}
+              </Typography>
             </Paper>
           </Box>
-          <Box sx={{ flex: '1 1 calc(33.333% - 16px)', minWidth: '120px' }}>
-            <Paper 
-              sx={{ 
-                p: 1, 
-                textAlign: 'center',
-                border: '1px solid',
-                borderColor: theme.palette.info.main,
-                bgcolor: 'rgba(59, 130, 246, 0.1)'
-              }}
-            >
-              <Typography variant="caption" display="block">20% Return</Typography>
-              <Typography variant="body2" fontWeight="bold">{formatDKK(twentyPercent)}</Typography>
-            </Paper>
-          </Box>
-          <Box sx={{ flex: '1 1 calc(33.333% - 16px)', minWidth: '120px' }}>
-            <Paper 
-              sx={{ 
-                p: 1, 
-                textAlign: 'center',
-                border: '1px solid',
-                borderColor: theme.palette.success.main,
-                bgcolor: 'rgba(34, 197, 94, 0.1)'
-              }}
-            >
-              <Typography variant="caption" display="block">30% Return</Typography>
-              <Typography variant="body2" fontWeight="bold">{formatDKK(thirtyPercent)}</Typography>
-            </Paper>
-          </Box>
+          ))}
         </Box>
       </Box>
     );
   };
   
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 4, overflowX: 'hidden' }}>
       <Typography 
         variant="h3" 
         component="h1" 
@@ -268,14 +282,23 @@ export default function Calculator() {
         Renters Rente Beregner
       </Typography>
       
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+      {/* Main responsive layout */}
+      <Box
+        sx={{
+          display: 'grid',
+          gap: 4,
+          gridTemplateColumns: {
+            xs: '1fr',        // single column (phones)
+            sm: '1fr',        // single column (small tablets)
+            md: '300px 1fr',  // sidebar + content (medium)
+            lg: '350px 1fr',  // wider sidebar (large)
+          },
+          width: '100%',
+          maxWidth: '100vw',
+        }}
+      >
         {/* Left column - Inputs */}
-        <Box sx={{ 
-          width: '100%', 
-          flexBasis: { xs: '100%', md: '33.333%', lg: '25%' },
-          flexGrow: 0, 
-          flexShrink: 0 
-        }}>
+        <Box sx={{ minWidth: 0 }}>
           <Paper 
             elevation={3} 
             sx={{ 
@@ -302,26 +325,26 @@ export default function Calculator() {
               </Box>
               <TextField
                 fullWidth
-                value={principal}
+                value={principal === 0 ? "" : principal}
                 onChange={handlePrincipalChange}
                 error={errors.principal}
                 helperText={errors.principal ? "Værdi skal være mellem 0 og 10.000.000" : ""}
                 InputProps={{
                   startAdornment: <InputAdornment position="start">DKK</InputAdornment>,
                 }}
-                type="number"
+                type="text"
                 size="small"
                 variant="outlined"
-              />
-              <Slider
-                value={principal}
-                onChange={handleSliderChange('principal')}
-                min={0}
-                max={1000000}
-                step={10000}
-                valueLabelDisplay="auto"
-                valueLabelFormat={(value) => formatDKK(value)}
-                sx={{ mt: 2 }}
+                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                sx={{
+                  '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
+                    WebkitAppearance: 'none',
+                    margin: 0,
+                  },
+                  '& input[type=number]': {
+                    MozAppearance: 'textfield',
+                  },
+                }}
               />
             </Box>
             
@@ -337,16 +360,26 @@ export default function Calculator() {
               </Box>
               <TextField
                 fullWidth
-                value={monthlyContribution}
+                value={monthlyContribution === 0 ? "" : monthlyContribution}
                 onChange={handleMonthlyContributionChange}
                 error={errors.monthlyContribution}
                 helperText={errors.monthlyContribution ? "Værdi skal være mellem 0 og 1.000.000" : ""}
                 InputProps={{
                   startAdornment: <InputAdornment position="start">DKK</InputAdornment>,
                 }}
-                type="number"
+                type="text"
                 size="small"
                 variant="outlined"
+                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                sx={{
+                  '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
+                    WebkitAppearance: 'none',
+                    margin: 0,
+                  },
+                  '& input[type=number]': {
+                    MozAppearance: 'textfield',
+                  },
+                }}
               />
               <Slider
                 value={monthlyContribution}
@@ -372,16 +405,26 @@ export default function Calculator() {
               </Box>
               <TextField
                 fullWidth
-                value={annualRate}
+                value={annualRate === 0 ? "" : annualRate}
                 onChange={handleAnnualRateChange}
                 error={errors.annualRate}
                 helperText={errors.annualRate ? "Værdi skal være mellem 0 og 50" : ""}
                 InputProps={{
                   endAdornment: <InputAdornment position="end">%</InputAdornment>,
                 }}
-                type="number"
+                type="text"
                 size="small"
                 variant="outlined"
+                inputProps={{ inputMode: 'decimal', pattern: '[0-9]*[.]?[0-9]*' }}
+                sx={{
+                  '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
+                    WebkitAppearance: 'none',
+                    margin: 0,
+                  },
+                  '& input[type=number]': {
+                    MozAppearance: 'textfield',
+                  },
+                }}
               />
               <Slider
                 value={annualRate}
@@ -412,16 +455,26 @@ export default function Calculator() {
               </Box>
               <TextField
                 fullWidth
-                value={years}
+                value={years === 0 ? "" : years}
                 onChange={handleYearsChange}
                 error={errors.years}
                 helperText={errors.years ? "Værdi skal være mellem 1 og 100" : ""}
                 InputProps={{
                   endAdornment: <InputAdornment position="end">år</InputAdornment>,
                 }}
-                type="number"
+                type="text"
                 size="small"
                 variant="outlined"
+                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                sx={{
+                  '& input[type=number]::-webkit-inner-spin-button, & input[type=number]::-webkit-outer-spin-button': {
+                    WebkitAppearance: 'none',
+                    margin: 0,
+                  },
+                  '& input[type=number]': {
+                    MozAppearance: 'textfield',
+                  },
+                }}
               />
               <Slider
                 value={years}
@@ -446,12 +499,7 @@ export default function Calculator() {
         </Box>
         
         {/* Right column - Results */}
-        <Box sx={{ 
-          width: '100%', 
-          flexBasis: { xs: '100%', md: '62.667%', lg: '70%' },
-          flexGrow: 1, 
-          flexShrink: 1 
-        }}>
+        <Box sx={{ minWidth: 0 }}>
           {/* Summary Cards */}
           <Box sx={{ 
             display: 'flex', 
@@ -459,38 +507,7 @@ export default function Calculator() {
             gap: 3, 
             mb: 4 
           }}>
-            <Box sx={{ 
-              width: '100%', 
-              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' },
-              flexGrow: 1 
-            }}>
-              <Card 
-                sx={{ 
-                  height: '100%',
-                  background: theme.palette.gradients.cardBase,
-                  borderRadius: 2,
-                  boxShadow: theme.shadows[4],
-                  transition: 'transform 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-5px)',
-                    boxShadow: theme.shadows[8],
-                  }
-                }}
-              >
-                <CardContent>
-                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                    Slutbalance
-                  </Typography>
-                  <Typography variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
-                    {formatDKK(finalBalance)}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    Efter {years} år
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-            
+            {/* --- Total Investeret ------------------------------------------------ */}
             <Box sx={{ 
               width: '100%', 
               flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' },
@@ -522,7 +539,8 @@ export default function Calculator() {
                 </CardContent>
               </Card>
             </Box>
-            
+
+            {/* --- Slutbalance ------------------------------------------------------ */}
             <Box sx={{ 
               width: '100%', 
               flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' },
@@ -531,7 +549,40 @@ export default function Calculator() {
               <Card 
                 sx={{ 
                   height: '100%',
-                  background: 'linear-gradient(to bottom, #3b82f6, #2563eb)',
+                  background: 'linear-gradient(to bottom, #475569, #334155)',
+                  borderRadius: 2,
+                  boxShadow: theme.shadows[4],
+                  transition: 'transform 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                    boxShadow: theme.shadows[8],
+                  }
+                }}
+              >
+                <CardContent>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Slutbalance
+                  </Typography>
+                  <Typography variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
+                    {formatDKK(finalBalance)}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                    Efter {years} år
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+
+            {/* --- Renter Tjent ----------------------------------------------------- */}
+            <Box sx={{ 
+              width: '100%', 
+              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' },
+              flexGrow: 1 
+            }}>
+              <Card 
+                sx={{ 
+                  height: '100%',
+                  background: theme.palette.gradients.cardBase,
                   borderRadius: 2,
                   boxShadow: theme.shadows[4],
                   transition: 'transform 0.3s ease-in-out',
@@ -555,6 +606,7 @@ export default function Calculator() {
               </Card>
             </Box>
             
+            {/* --- Tjent Afkast % -------------------------------------------------- */}
             <Box sx={{ 
               width: '100%', 
               flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' },
@@ -575,13 +627,13 @@ export default function Calculator() {
               >
                 <CardContent>
                   <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }} gutterBottom>
-                    Afkast %
+                    Tjent Afkast %
                   </Typography>
                   <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
                     {interestPercentage.toFixed(1)}%
                   </Typography>
                   <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
-                    Renter ift. investeret beløb
+                    {`med ${annualRate}%`}
                   </Typography>
                 </CardContent>
               </Card>

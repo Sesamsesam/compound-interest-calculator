@@ -89,13 +89,15 @@ const Navigation = () => {
           <Typography
             variant="subtitle2"
             sx={{
-              display: { xs: "none", md: "block" },
+              display: { xs: "block", md: "block" },
               color: "rgba(255, 255, 255, 0.8)",
               fontWeight: 500,
               letterSpacing: "0.05em",
               fontSize: "0.75rem",
               position: "absolute",
-              left: 0,
+              left: { xs: "50%", md: 0 },
+              transform: { xs: "translateX(-50%)", md: "none" },
+              textAlign: { xs: "center", md: "left" },
               textTransform: "uppercase"
             }}
           >
