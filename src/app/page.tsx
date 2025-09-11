@@ -14,14 +14,13 @@ export default function Home() {
       {/* Hero Section with Particle Effect - Full Width */}
       <section className="w-full overflow-hidden p-0 m-0 relative">
         {/* Logo overlay */}
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-4 left-4 z-10">
           <Image 
             src="/CPH_Trading_Academy_Logo-B2-removebg-preview.png" 
             alt="Copenhagen Trading Academy Logo" 
             width={200} 
             height={100} 
-            className="transform scale-200"
-            style={{ transform: 'scale(2)' }}
+            // removed 200 % scaling – now rendered at normal size
           />
         </div>
         <ParticleTextEffect words={["Byg Formue", "Renters Rente", "Det 8. Vidunder\naf Verden"]} />
