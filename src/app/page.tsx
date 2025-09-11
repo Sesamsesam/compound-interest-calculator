@@ -34,8 +34,10 @@ export default function Home() {
           />
         </div>
         <ParticleTextEffect words={["Byg Formue", "Renters Rente", "Det 8. Vidunder"]} />
-        {/* Hero CTA Button */}
-        <Box className="w-full flex justify-center mt-6">
+        {/* Hero CTA Button (overlay at bottom-center of hero) */}
+        <Box
+          className="absolute left-1/2 -translate-x-1/2 bottom-6 z-10"
+        >
           <Button
             variant="contained"
             size="large"
@@ -49,7 +51,7 @@ export default function Home() {
               boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
             }}
           >
-            Uderegn Økonomisk Frihed
+            Beregn Økonomisk Frihed
           </Button>
         </Box>
       </section>
@@ -313,7 +315,7 @@ export default function Home() {
                 boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
               }}
             >
-              Uderegn Økonomisk Frihed
+              Beregn Økonomisk Frihed
             </Button>
           </Box>
         </Container>
