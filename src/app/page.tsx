@@ -35,8 +35,9 @@ export default function Home() {
         </div>
         <ParticleTextEffect words={["Byg Formue", "Renters Rente", "Det 8. Vidunder"]} />
         {/* Hero CTA Button (overlay at bottom-center of hero) */}
+        {/* Adjusted positioning for equal spacing above and below */}
         <Box
-          className="absolute left-1/2 -translate-x-1/2 bottom-6 z-10"
+          className="absolute left-1/2 -translate-x-1/2 bottom-16 z-10"
         >
           <Button
             variant="contained"
