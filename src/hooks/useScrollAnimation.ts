@@ -16,8 +16,11 @@ interface UseScrollAnimationOptions {
  */
 export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
   const { 
-    threshold = 0.1, 
-    rootMargin = '0px', 
+    /* Trigger a bit earlier: element only needs ~30 % visibility             */
+    threshold = 0.3,
+    /* Negative top margin makes the trigger fire before the element
+       actually reaches the viewport (-50 px sooner)                         */
+    rootMargin = '-50px 0px',
     // By default run every time the element enters / leaves the viewport
     triggerOnce = false
   } = options;
