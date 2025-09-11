@@ -321,7 +321,7 @@ export default function Home() {
             
             <Typography 
               variant="h6" 
-              className="mb-8 text-slate-300 max-w-2xl mx-auto text-center"
+              className="mb-8 text-slate-300 mx-auto text-center"
               sx={{ fontWeight: 400 }}
             >
               Udnyt kraften ved renters rente og se, hvordan dine investeringer kan vokse over tid. Prøv vores beregner nu og tag det første skridt mod en sikrere økonomisk fremtid.
