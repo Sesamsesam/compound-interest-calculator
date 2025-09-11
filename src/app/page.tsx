@@ -60,7 +60,7 @@ export default function Home() {
         {/* Scroll indicator arrow */}
         <Box
           className="absolute left-1/2 -translate-x-1/2 text-white/70 select-none"
-          style={{ bottom: '50px' }} // 30 px below the button
+          style={{ bottom: '30px' }} // increased gap: 50 → 30 (now 50 px below the button)
         >
           <KeyboardArrowDownIcon sx={{ fontSize: 40 }} />
         </Box>
