@@ -20,11 +20,11 @@ interface UseScrollAnimationOptions {
  */
 export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
   const { 
-    /* Trigger a bit earlier: element only needs ~30 % visibility */
-    threshold = 0.3,
-    /* Negative top margin makes the trigger fire before the element
-       actually reaches the viewport (-50 px sooner) */
-    rootMargin = '-50px 0px',
+    /* Trigger even earlier: element only needs 10% visibility */
+    threshold = 0.10,
+    /* Larger negative top margin so the trigger fires much sooner
+       (≈ 20 px before the element reaches the viewport) */
+    rootMargin = '-20px 0px',
     // By default run every time the element enters / leaves the viewport
     triggerOnce = false
   } = options;
@@ -63,20 +63,30 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
           // When element comes into view while scrolling down, make it visible
           if (scrollingDown) {
             setIsVisible(true);
+          } else {
+            /* ------------------------------------------------------------------
+             * Special-case for the very first card:
+             * When the user has scrolled all the way back to the top (scrollY <= 0)
+             * we want the upper-most card to disappear, so the page looks folded-up.
+             * Only the element currently intersecting the viewport (the top card)
+             * will satisfy this condition, so lower cards remain untouched.
+             * -----------------------------------------------------------------*/
+            if (typeof window !== 'undefined' && window.scrollY <= 0) {
+              setIsVisible(false);
+            }
           }
           // If triggerOnce is true, disconnect the observer after element becomes visible
           if (triggerOnce && scrollingDown) {
             observer.disconnect();
           }
         } else {
-          // When element is leaving the viewport
-          if (!scrollingDown && !triggerOnce) {
-            // Check if element is leaving from the bottom of the viewport
+          // When element is completely out of the viewport
+          if (!scrollingDown && !triggerOnce && entry.intersectionRatio === 0) {
+            // Check if element is below the viewport
             const viewportHeight = window.innerHeight;
             const elementBottom = elementPositionRef.current?.bottom || 0;
             
-            // Only hide if element is leaving from the bottom (element bottom is greater than viewport height)
-            // This means the element is below the viewport when scrolling up
+            // Only hide if element is completely below the viewport
             if (elementBottom > viewportHeight) {
               setIsVisible(false);
             }

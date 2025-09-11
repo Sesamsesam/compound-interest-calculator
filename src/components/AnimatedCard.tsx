@@ -20,7 +20,9 @@ export const AnimatedCard: React.FC<AnimatedCardProps> = ({
   children,
   delay = 0,
   direction = 'up',
-  duration = 0.6,
+  /* Snappier entrance / exit animation */
+  /* Even faster fade/slide for quick scrolling */
+  duration = 0.1,
   distance = 50,
   threshold = 0.1,
   disableHoverEffects = false,

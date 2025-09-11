@@ -20,7 +20,8 @@ interface AnimatedCounterProps extends Omit<TypographyProps, 'children'> {
 
 export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   value,
-  duration = 2000,
+  /* Twice as fast default duration */
+  duration = 1000,
   delay = 0,
   prefix = '',
   suffix = '',
@@ -105,7 +106,8 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
 
   // Gradient text styles
   const gradientStyles = gradientText ? {
-    background: 'linear-gradient(90deg, #f5d020, #f53803)',
+    /* Yellow → Green gradient */
+    background: 'linear-gradient(90deg, #f5d020, #3df55a)',
     backgroundClip: 'text',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
