@@ -237,7 +237,7 @@ export default function Calculator() {
     const { gap1, gap2 } = calculateDynamicGaps(annualRate);
     const refRate1 = Math.max(0.1, annualRate - gap1);  // yellow
     const refRate2 = Math.max(0.1, annualRate - gap2);  // blue
-    const refRate3 = annualRate + 5;                    // purple
+    const refRate3 = annualRate + 3;                    // purple - changed from +5 to +3
 
     const refRates = [refRate1, refRate2, refRate3];
     const refBalances = refRates.map(
@@ -293,7 +293,7 @@ export default function Calculator() {
         align="center" 
         gutterBottom
         sx={{ 
-          mb: 4, 
+          mb: 1, 
           fontWeight: 700,
           background: 'linear-gradient(45deg, #3b82f6, #22c55e)',
           WebkitBackgroundClip: 'text',
@@ -302,6 +302,7 @@ export default function Calculator() {
       >
         Renters Rente Beregner
       </Typography>
+      
       
       {/* Main responsive layout */}
       <Box
@@ -521,7 +522,7 @@ export default function Calculator() {
         
         {/* Right column - Results */}
         <Box sx={{ minWidth: 0 }}>
-          {/* Summary Cards */}
+          {/* Summary Cards - Updated to 3 cards with 33.333% width */}
           <Box sx={{ 
             display: 'flex', 
             flexWrap: 'wrap', 
@@ -531,7 +532,7 @@ export default function Calculator() {
             {/* --- Total Investeret ------------------------------------------------ */}
             <Box sx={{ 
               width: '100%', 
-              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' },
+              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)' },
               flexGrow: 1 
             }}>
               <Card 
@@ -564,7 +565,7 @@ export default function Calculator() {
             {/* --- Slutbalance ------------------------------------------------------ */}
             <Box sx={{ 
               width: '100%', 
-              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' },
+              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)' },
               flexGrow: 1 
             }}>
               <Card 
@@ -597,7 +598,7 @@ export default function Calculator() {
             {/* --- Renter Tjent ----------------------------------------------------- */}
             <Box sx={{ 
               width: '100%', 
-              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' },
+              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)' },
               flexGrow: 1 
             }}>
               <Card 
@@ -622,39 +623,6 @@ export default function Calculator() {
                   </Typography>
                   <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
                     Afkast på investering
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
-            
-            {/* --- Tjent Afkast % -------------------------------------------------- */}
-            <Box sx={{ 
-              width: '100%', 
-              flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' },
-              flexGrow: 1 
-            }}>
-              <Card 
-                sx={{ 
-                  height: '100%',
-                  background: 'linear-gradient(to bottom, #22c55e, #16a34a)',
-                  borderRadius: 2,
-                  boxShadow: theme.shadows[4],
-                  transition: 'transform 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-5px)',
-                    boxShadow: theme.shadows[8],
-                  }
-                }}
-              >
-                <CardContent>
-                  <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }} gutterBottom>
-                    Tjent Afkast %
-                  </Typography>
-                  <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
-                    {interestPercentage.toFixed(1)}%
-                  </Typography>
-                  <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
-                    {`med ${annualRate}%`}
                   </Typography>
                 </CardContent>
               </Card>

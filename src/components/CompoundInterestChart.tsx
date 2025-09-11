@@ -18,6 +18,7 @@ import {
 import { Line, Bar } from 'react-chartjs-2'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import { useTheme } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
 // Register Chart.js components
 ChartJS.register(
@@ -94,6 +95,12 @@ const calculateDynamicGaps = (userRate: number) => {
   }
 };
 
+// Calculate cumulative return percentage
+const calculateCumulativeReturn = (endBalance: number, totalContributed: number): number => {
+  if (totalContributed <= 0) return 0;
+  return ((endBalance - totalContributed) / totalContributed) * 100;
+};
+
 const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundInterestChartProps) => {
   const chartRef = useRef<ChartJS>(null)
   const theme = useTheme()
@@ -120,18 +127,24 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
   // Dynamic benchmark rates
   const refRate1 = Math.max(0.1, annualRate - gap1); // Yellow (ensure minimum 0.1%)
   const refRate2 = Math.max(0.1, annualRate - gap2); // Blue (ensure minimum 0.1%)
-  const refRate3 = annualRate + 5; // Purple (always user rate + 5%)
+  const refRate3 = annualRate + 3; // Purple (always user rate + 3%)
   
   const refData1 = calculateWithRate(principal, monthlyContribution, refRate1, totalYears);
   const refData2 = calculateWithRate(principal, monthlyContribution, refRate2, totalYears);
   const refData3 = calculateWithRate(principal, monthlyContribution, refRate3, totalYears);
+
+  // Calculate final cumulative return percentage
+  const finalReturnPercentage = calculateCumulativeReturn(
+    yearlyData[yearlyData.length - 1]?.endBalance || 0,
+    yearlyData[yearlyData.length - 1]?.totalContributed || 0
+  );
 
   // Line chart data
   const lineChartData: ChartData<'line'> = {
     labels: years,
     datasets: [
       {
-        label: 'Din',
+        label: `Din (${annualRate.toFixed(1)}%)`,
         data: endBalances,
         // Switched to green
         borderColor: theme.palette.success.main,
@@ -291,11 +304,15 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
               // Calculate interest earned (value - total invested)
               const interestEarned = Math.round(value - totalInvested);
               
+              // Calculate cumulative return percentage for this year
+              const cumulativeReturn = calculateCumulativeReturn(value, totalInvested);
+              
               // Return formatted tooltip content
               return [
                 `Total Investeret: ${formatDKK(totalInvested)}`,
                 `Total Værdi: ${formatDKK(value)}`,
-                `Renter Optjent: ${formatDKK(interestEarned)}`
+                `Renter Optjent: ${formatDKK(interestEarned)}`,
+                `Optjent Procent: ${cumulativeReturn.toFixed(1)}%`
               ];
             } else {
               // For stacked chart, keep original format
@@ -401,7 +418,22 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
   }, [yearlyData, chartType, annualRate]);
 
   return (
-    <div style={{ width: '100%', height: '100%', minHeight: '400px' }}>
+    <Box sx={{ width: '100%', height: '100%', minHeight: '400px' }}>
+      {/* Chart title with subtitle showing total return percentage */}
+      {chartType === 'line' && (
+        <Typography 
+          variant="subtitle2" 
+          align="center" 
+          sx={{ 
+            color: theme.palette.success.main, 
+            mb: 2,
+            fontWeight: 'medium'
+          }}
+        >
+          Total Procent Optjent: {finalReturnPercentage.toFixed(1)}%
+        </Typography>
+      )}
+      
       {chartType === 'line' ? (
         <Line 
           data={lineChartData} 
@@ -415,7 +447,7 @@ const CompoundInterestChart = ({ yearlyData, chartType, annualRate }: CompoundIn
           ref={chartRef as React.RefObject<ChartJS<"bar", number[], string>>}
         />
       )}
-    </div>
+    </Box>
   );
 };
 
