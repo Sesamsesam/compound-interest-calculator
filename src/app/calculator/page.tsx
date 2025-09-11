@@ -245,6 +245,19 @@ export default function Calculator() {
       (rate) => calculateYearlyData(principal, monthlyContribution, rate, years)[years].endBalance
     );
     
+    // Define colors for each reference value
+    const borderColors = [
+      theme.palette.warning.main, // Yellow/gold
+      theme.palette.info.main,    // Blue
+      '#9c27b0'                   // Purple
+    ];
+    
+    const glowColors = [
+      'rgba(255, 215, 0, 0.6)',   // Gold glow
+      'rgba(33, 150, 243, 0.6)',  // Blue glow
+      'rgba(156, 39, 176, 0.6)'   // Purple glow
+    ];
+    
     return (
       <Box sx={{ mt: 2 }}>
         <Box sx={{ mb: 1 }}>
@@ -255,31 +268,51 @@ export default function Calculator() {
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
           {refBalances.map((balance, idx) => (
             <Box key={idx} sx={{ flex: '1 1 calc(33.333% - 16px)', minWidth: '120px' }}>
-            <Paper 
-              sx={{ 
-                p: 1, 
-                textAlign: 'center',
-                border: '1px solid',
-                borderColor: idx === 0
-                  ? theme.palette.warning.main
-                  : idx === 1
-                  ? theme.palette.info.main
-                  : '#9c27b0',
-                bgcolor: idx === 0
-                  ? 'rgba(234, 179, 8, 0.1)'
-                  : idx === 1
-                  ? 'rgba(59, 130, 246, 0.1)'
-                  : 'rgba(156, 39, 176, 0.1)'
-              }}
-            >
-              <Typography variant="caption" display="block">
-                {`${refRates[idx].toFixed(1)}%`}
-              </Typography>
-              <Typography variant="body2" fontWeight="bold">
-                {formatShortDKK(balance)}
-              </Typography>
-            </Paper>
-          </Box>
+              <Paper 
+                sx={{ 
+                  p: 1.5, 
+                  textAlign: 'center',
+                  border: '2px solid',
+                  borderColor: borderColors[idx],
+                  bgcolor: 'rgba(30, 41, 59, 0.7)',
+                  boxShadow: `0 0 10px ${glowColors[idx]}`,
+                  position: 'relative',
+                  overflow: 'hidden',
+                  borderRadius: '12px',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: `0 0 15px ${glowColors[idx]}`,
+                    transform: 'translateY(-2px)'
+                  },
+                  '@keyframes pulseBorder': {
+                    '0%': {
+                      boxShadow: `0 0 5px ${glowColors[idx]}`
+                    },
+                    '50%': {
+                      boxShadow: `0 0 15px ${glowColors[idx]}`
+                    },
+                    '100%': {
+                      boxShadow: `0 0 5px ${glowColors[idx]}`
+                    }
+                  },
+                  animation: 'pulseBorder 3s infinite'
+                }}
+              >
+                <Typography variant="caption" display="block" sx={{ 
+                  color: borderColors[idx],
+                  fontWeight: 'bold',
+                  fontSize: '0.85rem'
+                }}>
+                  {`${refRates[idx].toFixed(1)}%`}
+                </Typography>
+                <Typography variant="body1" fontWeight="bold" sx={{ 
+                  fontSize: '1.1rem',
+                  color: 'white'
+                }}>
+                  {formatShortDKK(balance)}
+                </Typography>
+              </Paper>
+            </Box>
           ))}
         </Box>
       </Box>
@@ -287,7 +320,7 @@ export default function Calculator() {
   };
   
   return (
-    <Container maxWidth="lg" sx={{ py: 4, overflowX: 'hidden' }}>
+    <Container maxWidth="lg" sx={{ py: 4, overflowX: 'hidden', bgcolor: '#000000'}}>
       <Typography 
         variant="h3" 
         component="h1" 
@@ -296,12 +329,18 @@ export default function Calculator() {
         sx={{ 
           mb: 1, 
           fontWeight: 700,
-          background: 'linear-gradient(45deg, #3b82f6, #22c55e)',
+          /* Sleek gold-silver metallic gradient */
+          background: 'linear-gradient(135deg, #ffd700 0%, #ffb347 40%, #c0c0c0 70%, #ffd700 100%)',
           WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent'
+          WebkitTextFillColor: 'transparent',
+          /* subtle depth & glow */
+          textShadow: `
+            0 1px 2px rgba(0,0,0,0.6),
+            0 0 8px rgba(255,215,0,0.6)
+          `
         }}
       >
-        Renters Rente Beregner
+        
       </Typography>
       
       
@@ -329,9 +368,9 @@ export default function Calculator() {
               sx={{ 
                 p: 3, 
                 borderRadius: 2,
-                background: 'rgba(30, 41, 59, 0.5)',
+                background: 'rgba(15, 23, 42, 0.8)',
                 backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)'
+                border: '1px solid rgba(255, 215, 0, 0.3)'
               }}
             >
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
@@ -545,7 +584,8 @@ export default function Calculator() {
               <Card 
                 sx={{ 
                   height: '100%',
-                  background: 'linear-gradient(to bottom, #475569, #334155)',
+                  /* Cool blue gradient */
+                  background: 'linear-gradient(135deg, #3b82f6, #1e40af)',
                   borderRadius: 2,
                   boxShadow: theme.shadows[4],
                   transition: 'transform 0.3s ease-in-out',
@@ -556,13 +596,13 @@ export default function Calculator() {
                 }}
               >
                 <CardContent>
-                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                  <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }} gutterBottom>
                     Total Investeret
                   </Typography>
-                  <Typography variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
                     {formatDKK(totalContributed)}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                  <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
                     Startkapital + indbetalinger
                   </Typography>
                 </CardContent>
@@ -581,7 +621,8 @@ export default function Calculator() {
               <Card 
                 sx={{ 
                   height: '100%',
-                  background: 'linear-gradient(to bottom, #475569, #334155)',
+                  /* Success green gradient */
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
                   borderRadius: 2,
                   boxShadow: theme.shadows[4],
                   transition: 'transform 0.3s ease-in-out',
@@ -592,13 +633,13 @@ export default function Calculator() {
                 }}
               >
                 <CardContent>
-                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                  <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }} gutterBottom>
                     Slutbalance
                   </Typography>
-                  <Typography variant="h5" component="div" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
                     {formatDKK(finalBalance)}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                  <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
                     Efter {years} år
                   </Typography>
                 </CardContent>

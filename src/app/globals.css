@@ -45,7 +45,8 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  /* Use pure black background for a high-contrast look */
+  --background: #000000;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -79,7 +80,8 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  /* Keep dark mode consistent with the pure black theme */
+  --background: #000000;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
