@@ -38,7 +38,7 @@ export default function Home() {
       </section>
 
       {/* Hero Content Section - Now in a Card */}
-      <section className="py-16">
+      <section>
         <Container maxWidth="md">
           <Paper 
             elevation={24}
@@ -62,7 +62,7 @@ export default function Home() {
       </section>
 
       {/* Einstein Quote Section */}
-      <section className="py-16">
+      <section>
         <Container maxWidth="md">
           <Paper 
             elevation={24}
@@ -121,7 +121,7 @@ export default function Home() {
       </section>
 
       {/* Story Section - Restructured to Single Column */}
-      <section className="py-16">
+      <section>
         <Container maxWidth="md">
           {/* Styrken ved Renters Rente Card */}
           <Paper 
@@ -253,7 +253,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16">
+      <section>
         <Container maxWidth="md">
           <Box 
             className="p-8 sm:p-12 rounded-2xl text-center"
