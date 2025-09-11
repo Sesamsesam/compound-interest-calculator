@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { useMediaQuery, useTheme } from "@mui/material"
 
 interface Vector2D {
   x: number
@@ -149,11 +150,29 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
   const wordIndexRef = useRef(0)
   // track left-click instead of right-click
   const mouseRef = useRef({ x: 0, y: 0, isPressed: false, isLeftClick: false })
+  
+  // Use Material-UI theme and media query for more reliable breakpoints
+  const theme = useTheme()
+  const isMobileQuery = useMediaQuery(theme.breakpoints.down('sm'))
   const [isMobile, setIsMobile] = useState(false)
   const [canvasSize, setCanvasSize] = useState({ width: 1000, height: 500 })
 
+  // Format words for mobile (stack all words vertically)
+  const formatWordsForMobile = (wordList: string[]): string[] => {
+    return wordList.map(word => {
+      if (isMobile) {
+        // On mobile: split all words by space and join with newlines
+        return word.split(' ').join('\n');
+      }
+      return word; // On desktop: keep original format
+    });
+  }
+
+  // Get formatted words based on device
+  const formattedWords = formatWordsForMobile(words);
+
   // Adjust sampling step based on device type
-  const pixelSteps = isMobile ? 12 : 6 // Fewer particles on mobile
+  const pixelSteps = isMobile ? 8 : 6 // Fewer but larger particles on mobile
   const drawAsPoints = true
 
   const generateRandomPos = (x: number, y: number, mag: number): Vector2D => {
@@ -185,7 +204,8 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     const offscreenCtx = offscreenCanvas.getContext("2d")!
 
     // Calculate responsive font size based on canvas width
-    const fontSize = Math.max(30, Math.min(100, canvas.width * 0.1))
+    // Increase font size for mobile (0.15 multiplier vs 0.1)
+    const fontSize = Math.max(30, Math.min(120, canvas.width * (isMobile ? 0.15 : 0.1)))
     
     // Draw text
     offscreenCtx.fillStyle = "white"
@@ -196,7 +216,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     // Handle multi-line text
     const lines = word.split('\n')
     if (lines.length > 1) {
-      const lineHeight = fontSize
+      const lineHeight = fontSize * 1.2 // Increased line height for better spacing
       const startY = canvas.height / 2 - ((lines.length - 1) * lineHeight) / 2
       lines.forEach((line, index) => {
         offscreenCtx.fillText(line, canvas.width / 2, startY + index * lineHeight)
@@ -250,11 +270,13 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
           particle.pos.x = randomPos.x
           particle.pos.y = randomPos.y
 
-          // Adjust particle speed and size for mobile
+          // Adjust particle speed and size for mobile - larger particles
           const speedMultiplier = isMobile ? 0.8 : 1.0
           particle.maxSpeed = (Math.random() * 6 + 4) * speedMultiplier
           particle.maxForce = particle.maxSpeed * 0.05
-          particle.particleSize = Math.random() * (isMobile ? 4 : 6) + (isMobile ? 4 : 6)
+          
+          // Double particle size on mobile (8-12 vs 4-6)
+          particle.particleSize = Math.random() * (isMobile ? 8 : 6) + (isMobile ? 8 : 6)
           particle.colorBlendRate = Math.random() * 0.0275 + 0.0025
 
           particles.push(particle)
@@ -328,8 +350,8 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     frameCountRef.current++
     // 0.2 s shorter → 213 frames at 60 fps
     if (frameCountRef.current % 213 === 0) {
-      wordIndexRef.current = (wordIndexRef.current + 1) % words.length
-      nextWord(words[wordIndexRef.current], canvas)
+      wordIndexRef.current = (wordIndexRef.current + 1) % formattedWords.length
+      nextWord(formattedWords[wordIndexRef.current], canvas)
     }
 
     animationRef.current = requestAnimationFrame(animate)
@@ -337,22 +359,23 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
 
   // Detect mobile device and set canvas size
   useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 768
-      setIsMobile(mobile)
-      
-      // Set responsive canvas size
+    // Use Material-UI's media query result
+    setIsMobile(isMobileQuery)
+    
+    const checkCanvasSize = () => {
+      // Set responsive canvas size - make mobile canvas taller for stacked text
       const width = Math.min(1000, window.innerWidth)
-      const height = Math.min(500, window.innerHeight * 0.6)
+      // Increase height on mobile for stacked text
+      const height = Math.min(600, window.innerHeight * (isMobileQuery ? 0.7 : 0.6))
       setCanvasSize({ width, height })
     }
     
     // Check on mount and window resize
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
+    checkCanvasSize()
+    window.addEventListener('resize', checkCanvasSize)
     
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+    return () => window.removeEventListener('resize', checkCanvasSize)
+  }, [isMobileQuery])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -363,7 +386,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     canvas.height = canvasSize.height
 
     // Initialize with first word
-    nextWord(words[0], canvas)
+    nextWord(formattedWords[0], canvas)
 
     // Start animation
     animate()
@@ -444,7 +467,7 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
       canvas.removeEventListener("touchend", handleTouchEnd)
       canvas.removeEventListener("touchmove", handleTouchMove)
     }
-  }, [words, canvasSize.width, canvasSize.height, isMobile]) // Add dependencies for responsive updates
+  }, [formattedWords, canvasSize.width, canvasSize.height, isMobile]) // Add dependencies for responsive updates
 
   return (
     <div className="w-full">

@@ -55,6 +55,8 @@ export default function Home() {
               borderRadius: "12px",
               boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
               minHeight: "44px", // Minimum touch target size
+              /* Prevent multi-line wrapping on narrow screens */
+              whiteSpace: "nowrap",
             }}
           >
             Beregn Økonomisk Frihed
@@ -416,6 +418,8 @@ export default function Home() {
                   borderRadius: "12px",
                   boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
                   minHeight: "44px", // Minimum touch target size
+                  /* Prevent multi-line wrapping on narrow screens */
+                  whiteSpace: "nowrap",
                 }}
               >
                 Beregn Økonomisk Frihed
