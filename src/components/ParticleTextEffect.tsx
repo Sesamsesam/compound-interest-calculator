@@ -214,8 +214,8 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     const offscreenCtx = offscreenCanvas.getContext("2d")!
 
     // Calculate responsive font size based on canvas width
-    // Increase font size for mobile (0.15 multiplier vs 0.1)
-    const fontSize = Math.max(30, Math.min(120, canvas.width * (isMobile ? 0.15 : 0.1)))
+    // Increase font size for mobile (0.22 multiplier vs 0.1)
+    const fontSize = Math.max(30, Math.min(160, canvas.width * (isMobile ? 0.22 : 0.1)))
     
     // Draw text
     offscreenCtx.fillStyle = "white"
@@ -223,16 +223,19 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     offscreenCtx.textAlign = "center"
     offscreenCtx.textBaseline = "middle"
     
+    // Choose a higher baseline for mobile so text sits higher (≈35% down)
+    const baseY = isMobile ? canvas.height * 0.35 : canvas.height / 2
+
     // Handle multi-line text
     const lines = word.split('\n')
     if (lines.length > 1) {
       const lineHeight = fontSize * 1.2 // Increased line height for better spacing
-      const startY = canvas.height / 2 - ((lines.length - 1) * lineHeight) / 2
+      const startY = baseY - ((lines.length - 1) * lineHeight) / 2
       lines.forEach((line, index) => {
         offscreenCtx.fillText(line, canvas.width / 2, startY + index * lineHeight)
       })
     } else {
-      offscreenCtx.fillText(word, canvas.width / 2, canvas.height / 2)
+      offscreenCtx.fillText(word, canvas.width / 2, baseY)
     }
 
     const imageData = offscreenCtx.getImageData(0, 0, canvas.width, canvas.height)
