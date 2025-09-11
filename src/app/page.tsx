@@ -9,9 +9,9 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import Link from "next/link"
 import Image from "next/image"
-import { AnimatedCard } from "@/components/AnimatedCard"
 import { AnimatedCounter } from "@/components/AnimatedCounter"
 import { scrollToNextSection } from "@/utils/smoothScroll"
+import { GlowingEffect } from "@/components/ui/glowing-effect"
 
 export default function Home() {
   const handleScrollDown = () => {
@@ -74,7 +74,8 @@ export default function Home() {
       {/*  Push further below fold on desktop (lg:mt-32) but keep normal spacing on mobile (mt-8) */}
       <section className="mt-8 lg:mt-32">
         <Container maxWidth="md">
-          <AnimatedCard delay={0.1} direction="up">
+          <Box sx={{ position: 'relative', borderRadius: 2 }}>
+            <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
             <Paper 
               elevation={24}
               className="pt-6 sm:pt-8 md:pt-12 px-4 sm:px-8 md:px-12 pb-4 backdrop-blur-md rounded-xl mb-8 sm:mb-12"
@@ -132,7 +133,7 @@ export default function Home() {
                 </Box>
               </Box>
             </Paper>
-          </AnimatedCard>
+          </Box>
         </Container>
       </section>
 
@@ -141,7 +142,8 @@ export default function Home() {
         <Container maxWidth="md">
           {/* items-stretch forces children to same height */}
           <Box className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12 items-stretch">
-            <AnimatedCard delay={0.2} direction="left">
+            <Box sx={{ position: 'relative', borderRadius: 2 }}>
+              <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
               <Paper 
                 /* h-full makes this card stretch to full row height */
                 className="p-4 sm:p-6 backdrop-blur-sm rounded-xl h-full"
@@ -186,9 +188,10 @@ export default function Home() {
                   </Typography>
                 </Box>
               </Paper>
-            </AnimatedCard>
+            </Box>
             
-            <AnimatedCard delay={0.2} direction="right">
+            <Box sx={{ position: 'relative', borderRadius: 2 }}>
+              <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
               <Paper 
                 /* h-full makes this card stretch to full row height */
                 className="p-4 sm:p-6 backdrop-blur-sm rounded-xl h-full"
@@ -221,7 +224,7 @@ export default function Home() {
                   </Typography>
                 </Box>
               </Paper>
-            </AnimatedCard>
+            </Box>
           </Box>
         </Container>
       </section>
@@ -229,7 +232,8 @@ export default function Home() {
       {/* Hero Content Section - Moved to be third after hero */}
       <section>
         <Container maxWidth="md">
-          <AnimatedCard delay={0.3} direction="up">
+          <Box sx={{ position: 'relative', borderRadius: 2 }}>
+            <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
             <Paper 
               elevation={24}
               className="p-6 sm:p-8 md:p-12 backdrop-blur-md rounded-xl mb-8 sm:mb-12"
@@ -251,7 +255,7 @@ export default function Home() {
                 Oplev hvordan små, regelmæssige investeringer kan vokse til betydelige formuer over tid med renters rente effekten.
               </Typography>
             </Paper>
-          </AnimatedCard>
+          </Box>
         </Container>
       </section>
 
@@ -259,7 +263,8 @@ export default function Home() {
       <section>
         <Container maxWidth="md">
           {/* Styrken ved Renters Rente Card */}
-          <AnimatedCard delay={0.4} direction="up">
+          <Box sx={{ position: 'relative', borderRadius: 2 }}>
+            <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
             <Paper 
               elevation={24}
               className="p-6 sm:p-8 md:p-12 rounded-xl mb-8 sm:mb-12"
@@ -324,10 +329,11 @@ export default function Home() {
               
               {/* The following two paragraphs have been moved to their own card below */}
             </Paper>
-          </AnimatedCard>
+          </Box>
 
           {/* Additional Insight Card (moved text) */}
-          <AnimatedCard delay={0.5} direction="up">
+          <Box sx={{ position: 'relative', borderRadius: 2 }}>
+            <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
             <Paper 
               elevation={24}
               className="pt-6 sm:pt-8 md:pt-12 px-6 sm:px-8 md:px-12 pb-4 sm:pb-6 backdrop-blur-md rounded-xl mb-8 sm:mb-12"
@@ -353,14 +359,15 @@ export default function Home() {
                 Vores beregner giver dig mulighed for at visualisere denne vækst og forstå, hvordan forskellige afkastrater og investeringsperioder kan påvirke din økonomiske fremtid.
               </Typography>
             </Paper>
-          </AnimatedCard>
+          </Box>
         </Container>
       </section>
 
       {/* CTA Section */}
       <section>
         <Container maxWidth="md">
-          <AnimatedCard delay={0.6} direction="up">
+          <Box sx={{ position: 'relative', borderRadius: 2 }}>
+            <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
             <Box
               className="p-6 sm:p-8 md:p-12 rounded-2xl text-center mb-8 sm:mb-12"
               sx={{ 
@@ -414,7 +421,7 @@ export default function Home() {
                 Beregn Økonomisk Frihed
               </Button>
             </Box>
-          </AnimatedCard>
+          </Box>
         </Container>
       </section>
 

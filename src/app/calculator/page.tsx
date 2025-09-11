@@ -323,7 +323,7 @@ export default function Calculator() {
         {/* Left column - Inputs */}
         <Box sx={{ minWidth: 0 }}>
           <Box sx={{ position: 'relative', borderRadius: 2 }}>
-            <GlowingEffect disabled={false} proximity={100} spread={30} glow={true} />
+            <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
             <Paper 
               elevation={3} 
               sx={{ 
@@ -541,7 +541,7 @@ export default function Calculator() {
               position: 'relative',
               borderRadius: 2
             }}>
-              <GlowingEffect disabled={false} proximity={100} spread={30} glow={true} />
+              <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
               <Card 
                 sx={{ 
                   height: '100%',
@@ -550,7 +550,7 @@ export default function Calculator() {
                   boxShadow: theme.shadows[4],
                   transition: 'transform 0.3s ease-in-out',
                   '&:hover': {
-                    transform: 'translateY(-5px)',
+                    transform: 'translateY(0px)',
                     boxShadow: theme.shadows[8],
                   }
                 }}
@@ -577,7 +577,7 @@ export default function Calculator() {
               position: 'relative',
               borderRadius: 2
             }}>
-              <GlowingEffect disabled={false} proximity={100} spread={30} glow={true} />
+              <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
               <Card 
                 sx={{ 
                   height: '100%',
@@ -586,7 +586,7 @@ export default function Calculator() {
                   boxShadow: theme.shadows[4],
                   transition: 'transform 0.3s ease-in-out',
                   '&:hover': {
-                    transform: 'translateY(-5px)',
+                    transform: 'translateY(0px)',
                     boxShadow: theme.shadows[8],
                   }
                 }}
@@ -610,7 +610,7 @@ export default function Calculator() {
           
           {/* Chart Section */}
           <Box sx={{ position: 'relative', borderRadius: 2, mb: 4 }}>
-            <GlowingEffect disabled={false} proximity={100} spread={30} glow={true} />
+            <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
             <Paper 
               elevation={3} 
               sx={{ 
@@ -665,7 +665,7 @@ export default function Calculator() {
           
           {/* Data Table */}
           <Box sx={{ position: 'relative', borderRadius: 2 }}>
-            <GlowingEffect disabled={false} proximity={100} spread={30} glow={true} />
+            <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
             <Paper 
               elevation={3} 
               sx={{ 
