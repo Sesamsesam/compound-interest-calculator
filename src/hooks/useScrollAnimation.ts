@@ -10,7 +10,7 @@ interface UseScrollAnimationOptions {
  * Custom hook that uses Intersection Observer to detect when elements come into view.
  * Implements an unfold/fold behavior where:
  * - When scrolling DOWN: Elements appear when they come into view and stay visible
- * - When scrolling UP: Elements disappear when scrolled past
+ * - When scrolling UP: Only elements leaving the BOTTOM of the viewport disappear
  * 
  * @param options Configuration options for the Intersection Observer
  * @param options.threshold The percentage of the target element that needs to be visible
@@ -34,6 +34,8 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
   // Track scroll direction
   const prevScrollY = useRef<number>(typeof window !== 'undefined' ? window.scrollY : 0);
   const [scrollingDown, setScrollingDown] = useState<boolean>(true);
+  // Track element position relative to viewport
+  const elementPositionRef = useRef<{ top: number; bottom: number } | null>(null);
 
   // Update scroll direction when scrolling
   useEffect(() => {
@@ -51,7 +53,12 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Different behavior based on scroll direction
+        // Store element position relative to viewport
+        if (ref.current) {
+          const rect = ref.current.getBoundingClientRect();
+          elementPositionRef.current = { top: rect.top, bottom: rect.bottom };
+        }
+
         if (entry.isIntersecting) {
           // When element comes into view while scrolling down, make it visible
           if (scrollingDown) {
@@ -62,9 +69,17 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
             observer.disconnect();
           }
         } else {
-          // When element leaves view while scrolling up, make it invisible
+          // When element is leaving the viewport
           if (!scrollingDown && !triggerOnce) {
-            setIsVisible(false);
+            // Check if element is leaving from the bottom of the viewport
+            const viewportHeight = window.innerHeight;
+            const elementBottom = elementPositionRef.current?.bottom || 0;
+            
+            // Only hide if element is leaving from the bottom (element bottom is greater than viewport height)
+            // This means the element is below the viewport when scrolling up
+            if (elementBottom > viewportHeight) {
+              setIsVisible(false);
+            }
           }
           // When scrolling down, keep elements visible even when they leave the viewport
         }
