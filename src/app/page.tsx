@@ -1,103 +1,289 @@
-import Image from "next/image";
+"use client"
+
+import { Container, Typography, Button, Box, Paper } from "@mui/material"
+import { ParticleTextEffect } from "@/components/ParticleTextEffect"
+import CalculateIcon from "@mui/icons-material/Calculate"
+import TrendingUpIcon from "@mui/icons-material/TrendingUp"
+import FormatQuoteIcon from "@mui/icons-material/FormatQuote"
+import Link from "next/link"
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Hero Section with Particle Effect - Full Width */}
+      <section className="w-full overflow-hidden p-0 m-0">
+        <ParticleTextEffect words={["Byg Formue", "Renters Rente", "Den 8. Vidunder\naf Verden"]} />
+      </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      {/* Hero Content Section */}
+      <section className="py-12 bg-gradient-to-b from-slate-900 to-slate-800">
+        <Container maxWidth="lg">
+          <Box className="flex flex-col items-center justify-center text-center">
+            <Typography 
+              variant="h6" 
+              className="text-slate-300 max-w-2xl mx-auto"
+              sx={{ fontWeight: 400 }}
+            >
+              Oplev hvordan små, regelmæssige investeringer kan vokse til betydelige formuer over tid med renters rente effekten.
+            </Typography>
+            
+            <Button 
+              variant="contained" 
+              size="large" 
+              component={Link}
+              href="/calculator"
+              startIcon={<CalculateIcon />}
+              className="mt-8 px-8 py-3 text-lg"
+              sx={{ 
+                mt: 6,
+                py: 1.5,
+                px: 4,
+                fontSize: '1.1rem',
+                borderRadius: '12px',
+                boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.5)'
+              }}
+            >
+              Prøv Beregneren
+            </Button>
+          </Box>
+        </Container>
+      </section>
+
+      {/* Einstein Quote Section */}
+      <section className="py-20 bg-gradient-to-b from-slate-900 to-slate-800">
+        <Container maxWidth="md">
+          <Paper 
+            elevation={24}
+            className="p-8 sm:p-12 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl"
+            sx={{ 
+              background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8))',
+              backdropFilter: 'blur(10px)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <Box className="flex flex-col items-center text-center">
+              <FormatQuoteIcon 
+                sx={{ 
+                  fontSize: 60, 
+                  color: 'primary.main',
+                  opacity: 0.8,
+                  mb: 2
+                }} 
+              />
+              <Typography 
+                variant="h4" 
+                component="blockquote"
+                className="mb-6 text-white italic"
+                sx={{ 
+                  fontWeight: 600,
+                  lineHeight: 1.4,
+                  letterSpacing: '-0.01em'
+                }}
+              >
+                &quot;Renters rente er verdens ottende vidunder. Den, der forstår det, tjener på det... den, der ikke gør, betaler for det.&quot;
+              </Typography>
+              <Typography 
+                variant="h6" 
+                component="cite"
+                className="text-slate-300"
+                sx={{ fontWeight: 500 }}
+              >
+                — Albert Einstein
+              </Typography>
+            </Box>
+          </Paper>
+        </Container>
+      </section>
+
+      {/* Story Section */}
+      <section className="py-20 bg-gradient-to-b from-slate-800 to-slate-900">
+        <Container maxWidth="lg">
+          <Box className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <Box>
+              <Typography 
+                variant="h3" 
+                component="h2" 
+                className="mb-6 text-white"
+                sx={{ 
+                  fontWeight: 700,
+                  mb: 4,
+                  position: 'relative',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: -10,
+                    left: 0,
+                    width: 80,
+                    height: 4,
+                    backgroundColor: 'primary.main',
+                    borderRadius: 2
+                  }
+                }}
+              >
+                Styrken ved Renters Rente
+              </Typography>
+              
+              <Typography paragraph className="text-slate-300 mb-4">
+                Renters rente er det finansielle fænomen, hvor du ikke kun tjener renter på din oprindelige investering, men også på de renter, du allerede har optjent.
+              </Typography>
+              
+              <Typography paragraph className="text-slate-300 mb-4">
+                Over tid kan denne effekt føre til eksponentiel vækst af din formue. Jo længere din investeringshorisont er, desto mere dramatisk bliver effekten.
+              </Typography>
+              
+              <Typography paragraph className="text-slate-300 mb-4">
+                Selv små månedlige bidrag kan vokse til betydelige summer over årtier, især når de investeres med konsistente afkast.
+              </Typography>
+              
+              <Typography paragraph className="text-slate-300">
+                Vores beregner giver dig mulighed for at visualisere denne vækst og forstå, hvordan forskellige afkastrater og investeringsperioder kan påvirke din økonomiske fremtid.
+              </Typography>
+            </Box>
+            
+            <Box className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <Paper 
+                className="p-6 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl"
+                sx={{ 
+                  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)'
+                  }
+                }}
+              >
+                <Box className="flex flex-col items-center text-center">
+                  <TrendingUpIcon 
+                    sx={{ 
+                      fontSize: 48, 
+                      color: 'warning.main',
+                      mb: 2
+                    }} 
+                  />
+                  <Typography variant="h6" className="mb-2 text-white font-bold">
+                    7% Årligt Afkast
+                  </Typography>
+                  <Typography className="text-slate-300">
+                    5.000 kr/md over 20 år bliver til <strong className="text-yellow-400">2.631.910 kr</strong>
+                  </Typography>
+                </Box>
+              </Paper>
+              
+              <Paper 
+                className="p-6 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl"
+                sx={{ 
+                  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)'
+                  }
+                }}
+              >
+                <Box className="flex flex-col items-center text-center">
+                  <TrendingUpIcon 
+                    sx={{ 
+                      fontSize: 48, 
+                      color: 'success.main',
+                      mb: 2
+                    }} 
+                  />
+                  <Typography variant="h6" className="mb-2 text-white font-bold">
+                    Tid er Din Ven
+                  </Typography>
+                  <Typography className="text-slate-300">
+                    Jo tidligere du starter, desto mere dramatisk bliver væksten af din investering.
+                  </Typography>
+                </Box>
+              </Paper>
+              
+              <Paper 
+                className="p-6 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:col-span-2"
+                sx={{ 
+                  transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-8px)',
+                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)'
+                  }
+                }}
+              >
+                <Box className="flex flex-col items-center text-center">
+                  <CalculateIcon 
+                    sx={{ 
+                      fontSize: 48, 
+                      color: 'primary.main',
+                      mb: 2
+                    }} 
+                  />
+                  <Typography variant="h6" className="mb-2 text-white font-bold">
+                    Se Din Egen Vækst
+                  </Typography>
+                  <Typography className="text-slate-300 mb-4">
+                    Brug vores beregner til at se, hvordan dine egne investeringer kan vokse over tid.
+                  </Typography>
+                  <Button 
+                    variant="outlined" 
+                    color="primary"
+                    component={Link}
+                    href="/calculator"
+                    size="large"
+                  >
+                    Gå til Beregneren
+                  </Button>
+                </Box>
+              </Paper>
+            </Box>
+          </Box>
+        </Container>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-b from-slate-900 to-slate-800">
+        <Container maxWidth="md">
+          <Box 
+            className="p-8 sm:p-12 rounded-2xl text-center"
+            sx={{ 
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+            }}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <Typography 
+              variant="h3" 
+              component="h2" 
+              className="mb-6 text-white"
+              sx={{ fontWeight: 700 }}
+            >
+              Start Din Rejse Mod Økonomisk Frihed
+            </Typography>
+            
+            <Typography 
+              variant="h6" 
+              className="mb-8 text-slate-300 max-w-2xl mx-auto"
+              sx={{ fontWeight: 400 }}
+            >
+              Udnyt kraften ved renters rente og se, hvordan dine investeringer kan vokse over tid. Prøv vores beregner nu og tag det første skridt mod en sikrere økonomisk fremtid.
+            </Typography>
+            
+            <Button 
+              variant="contained" 
+              size="large" 
+              component={Link}
+              href="/calculator"
+              startIcon={<CalculateIcon />}
+              className="px-8 py-3 text-lg"
+              sx={{ 
+                py: 1.5,
+                px: 4,
+                fontSize: '1.1rem',
+                borderRadius: '12px',
+                boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.5)'
+              }}
+            >
+              Prøv Renters Rente Beregneren
+            </Button>
+          </Box>
+        </Container>
+      </section>
     </div>
   );
 }

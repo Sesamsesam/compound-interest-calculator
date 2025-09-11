@@ -1,0 +1,178 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { 
+  AppBar, 
+  Toolbar, 
+  Button, 
+  Typography, 
+  Box, 
+  Container,
+  useMediaQuery,
+  useTheme,
+  IconButton,
+  Menu,
+  MenuItem
+} from "@mui/material"
+import MenuIcon from "@mui/icons-material/Menu"
+import CalculateIcon from "@mui/icons-material/Calculate"
+import HomeIcon from "@mui/icons-material/Home"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+
+const Navigation = () => {
+  const pathname = usePathname()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [scrolled, setScrolled] = useState(false)
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  // Handle scroll effect for AppBar
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [scrolled])
+
+  const navItems = [
+    { name: "Home", path: "/", icon: <HomeIcon fontSize="small" /> },
+    { name: "Calculator", path: "/calculator", icon: <CalculateIcon fontSize="small" /> }
+  ]
+
+  return (
+    <AppBar 
+      position="sticky" 
+      elevation={scrolled ? 4 : 0}
+      sx={{
+        background: scrolled 
+          ? "linear-gradient(to right, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95))" 
+          : "transparent",
+        backdropFilter: scrolled ? "blur(8px)" : "none",
+        transition: "all 0.3s ease",
+        borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.1)" : "none",
+      }}
+    >
+      <Container maxWidth="lg">
+        <Toolbar disableGutters sx={{ justifyContent: "center" }}>
+          {/* Desktop Navigation - Centered */}
+          <Box 
+            sx={{ 
+              flexGrow: 1, 
+              display: { xs: "none", md: "flex" },
+              justifyContent: "center" 
+            }}
+          >
+            {navItems.map((item) => (
+              <Button
+                key={item.name}
+                component={Link}
+                href={item.path}
+                startIcon={item.icon}
+                sx={{
+                  mx: 2,
+                  color: "white",
+                  position: "relative",
+                  "&::after": pathname === item.path ? {
+                    content: '""',
+                    position: "absolute",
+                    width: "100%",
+                    height: "3px",
+                    bottom: 0,
+                    left: 0,
+                    backgroundColor: "#3b82f6",
+                    borderRadius: "3px 3px 0 0",
+                  } : {},
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 255, 255, 0.08)",
+                  },
+                }}
+              >
+                {item.name}
+              </Button>
+            ))}
+          </Box>
+
+          {/* Mobile Navigation */}
+          {isMobile && (
+            <Box sx={{ display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size="large"
+                aria-label="menu"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                PaperProps={{
+                  sx: {
+                    backgroundColor: "rgba(15, 23, 42, 0.95)",
+                    backdropFilter: "blur(8px)",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                  }
+                }}
+              >
+                {navItems.map((item) => (
+                  <MenuItem 
+                    key={item.name} 
+                    onClick={handleClose}
+                    component={Link}
+                    href={item.path}
+                    selected={pathname === item.path}
+                    sx={{
+                      color: "white",
+                      "&.Mui-selected": {
+                        backgroundColor: "rgba(59, 130, 246, 0.15)",
+                      },
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 255, 255, 0.08)",
+                      },
+                    }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      {item.icon}
+                      <Typography sx={{ ml: 1 }}>{item.name}</Typography>
+                    </Box>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
+        </Toolbar>
+      </Container>
+    </AppBar>
+  )
+}
+
+export default Navigation
