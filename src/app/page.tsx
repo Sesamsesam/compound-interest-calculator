@@ -310,7 +310,7 @@ export default function Home() {
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
             }}
           >
-            <Box sx={{ marginBottom: '64px' }}>
+            <Box sx={{ marginBottom: '32px' }}>
               <Typography
                 variant="h5"
                 component="h2"
