@@ -237,7 +237,7 @@ export default function Home() {
               className="mb-6 text-white text-center"
               sx={{
                 fontWeight: 700,
-                mb: 4,
+                mb: 2,
                 position: 'relative',
                 '&::after': {
                   content: '""',
