@@ -256,8 +256,8 @@ export default function Home() {
             </Typography>
             <Box className="flex flex-col md:flex-row items-center gap-6">
               <Image
-                src="/einstein funny.png"
-                alt="Funny Albert Einstein"
+                src="/rentes rente.png"
+                alt="Renters Rente Graf"
                 width={220}
                 height={300}
                 className="rounded-lg"
