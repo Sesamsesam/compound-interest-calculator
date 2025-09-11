@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface Vector2D {
   x: number
@@ -149,14 +149,16 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
   const wordIndexRef = useRef(0)
   // track left-click instead of right-click
   const mouseRef = useRef({ x: 0, y: 0, isPressed: false, isLeftClick: false })
+  const [isMobile, setIsMobile] = useState(false)
+  const [canvasSize, setCanvasSize] = useState({ width: 1000, height: 500 })
 
-  // original sampling step
-  const pixelSteps = 6
+  // Adjust sampling step based on device type
+  const pixelSteps = isMobile ? 12 : 6 // Fewer particles on mobile
   const drawAsPoints = true
 
   const generateRandomPos = (x: number, y: number, mag: number): Vector2D => {
-    const randomX = Math.random() * 1000
-    const randomY = Math.random() * 500
+    const randomX = Math.random() * canvasSize.width
+    const randomY = Math.random() * canvasSize.height
 
     const direction = {
       x: randomX - x,
@@ -176,24 +178,25 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
   }
 
   const nextWord = (word: string, canvas: HTMLCanvasElement) => {
-    // const ctx = canvas.getContext("2d")!
-
     // Create off-screen canvas for text rendering
     const offscreenCanvas = document.createElement("canvas")
     offscreenCanvas.width = canvas.width
     offscreenCanvas.height = canvas.height
     const offscreenCtx = offscreenCanvas.getContext("2d")!
 
+    // Calculate responsive font size based on canvas width
+    const fontSize = Math.max(30, Math.min(100, canvas.width * 0.1))
+    
     // Draw text
     offscreenCtx.fillStyle = "white"
-    offscreenCtx.font = "bold 100px Arial"
+    offscreenCtx.font = `bold ${fontSize}px Arial`
     offscreenCtx.textAlign = "center"
     offscreenCtx.textBaseline = "middle"
     
     // Handle multi-line text
     const lines = word.split('\n')
     if (lines.length > 1) {
-      const lineHeight = 100
+      const lineHeight = fontSize
       const startY = canvas.height / 2 - ((lines.length - 1) * lineHeight) / 2
       lines.forEach((line, index) => {
         offscreenCtx.fillText(line, canvas.width / 2, startY + index * lineHeight)
@@ -247,9 +250,11 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
           particle.pos.x = randomPos.x
           particle.pos.y = randomPos.y
 
-          particle.maxSpeed = Math.random() * 6 + 4
+          // Adjust particle speed and size for mobile
+          const speedMultiplier = isMobile ? 0.8 : 1.0
+          particle.maxSpeed = (Math.random() * 6 + 4) * speedMultiplier
           particle.maxForce = particle.maxSpeed * 0.05
-          particle.particleSize = Math.random() * 6 + 6
+          particle.particleSize = Math.random() * (isMobile ? 4 : 6) + (isMobile ? 4 : 6)
           particle.colorBlendRate = Math.random() * 0.0275 + 0.0025
 
           particles.push(particle)
@@ -282,7 +287,6 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     const ctx = canvas.getContext("2d")!
     const particles = particlesRef.current
 
-    // Background with motion blur
     // Clear the canvas completely so underlying layers (e.g. WebGL rainbow)
     // remain visible. This makes the particle layer fully transparent.
     ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -306,13 +310,15 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
       }
     }
 
-    // Handle mouse interaction
+    // Handle mouse/touch interaction
     if (mouseRef.current.isPressed && mouseRef.current.isLeftClick) {
       particles.forEach((particle) => {
         const distance = Math.sqrt(
           Math.pow(particle.pos.x - mouseRef.current.x, 2) + Math.pow(particle.pos.y - mouseRef.current.y, 2),
         )
-        if (distance < 50) {
+        // Larger touch area for mobile
+        const interactionRadius = isMobile ? 80 : 50
+        if (distance < interactionRadius) {
           particle.kill(canvas.width, canvas.height)
         }
       })
@@ -329,12 +335,32 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
     animationRef.current = requestAnimationFrame(animate)
   }
 
+  // Detect mobile device and set canvas size
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768
+      setIsMobile(mobile)
+      
+      // Set responsive canvas size
+      const width = Math.min(1000, window.innerWidth)
+      const height = Math.min(500, window.innerHeight * 0.6)
+      setCanvasSize({ width, height })
+    }
+    
+    // Check on mount and window resize
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    canvas.width = 1000
-    canvas.height = 500
+    // Apply canvas size
+    canvas.width = canvasSize.width
+    canvas.height = canvasSize.height
 
     // Initialize with first word
     nextWord(words[0], canvas)
@@ -367,10 +393,43 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
       e.preventDefault()
     }
 
+    // Touch event handlers
+    const handleTouchStart = (e: TouchEvent) => {
+      e.preventDefault()
+      mouseRef.current.isPressed = true
+      mouseRef.current.isLeftClick = true
+      const rect = canvas.getBoundingClientRect()
+      if (e.touches.length > 0) {
+        mouseRef.current.x = e.touches[0].clientX - rect.left
+        mouseRef.current.y = e.touches[0].clientY - rect.top
+      }
+    }
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      e.preventDefault()
+      mouseRef.current.isPressed = false
+      mouseRef.current.isLeftClick = false
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault()
+      const rect = canvas.getBoundingClientRect()
+      if (e.touches.length > 0) {
+        mouseRef.current.x = e.touches[0].clientX - rect.left
+        mouseRef.current.y = e.touches[0].clientY - rect.top
+      }
+    }
+
+    // Add event listeners
     canvas.addEventListener("mousedown", handleMouseDown)
     canvas.addEventListener("mouseup", handleMouseUp)
     canvas.addEventListener("mousemove", handleMouseMove)
     canvas.addEventListener("contextmenu", handleContextMenu)
+    
+    // Add touch event listeners
+    canvas.addEventListener("touchstart", handleTouchStart)
+    canvas.addEventListener("touchend", handleTouchEnd)
+    canvas.addEventListener("touchmove", handleTouchMove)
 
     return () => {
       if (animationRef.current) {
@@ -380,15 +439,22 @@ export function ParticleTextEffect({ words = DEFAULT_WORDS }: ParticleTextEffect
       canvas.removeEventListener("mouseup", handleMouseUp)
       canvas.removeEventListener("mousemove", handleMouseMove)
       canvas.removeEventListener("contextmenu", handleContextMenu)
+      
+      canvas.removeEventListener("touchstart", handleTouchStart)
+      canvas.removeEventListener("touchend", handleTouchEnd)
+      canvas.removeEventListener("touchmove", handleTouchMove)
     }
-  }, [words]) // Add words to dependency array to ensure nextWord uses the latest words prop
+  }, [words, canvasSize.width, canvasSize.height, isMobile]) // Add dependencies for responsive updates
 
   return (
     <div className="w-full">
       <canvas
         ref={canvasRef}
-        className="w-full h-auto"
-        style={{ display: 'block' }}
+        className="w-full h-auto mx-auto"
+        style={{ 
+          display: 'block',
+          maxHeight: '70vh' // Limit height on mobile
+        }}
       />
     </div>
   )

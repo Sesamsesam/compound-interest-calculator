@@ -33,13 +33,14 @@ export default function Home() {
       {/* Hero Section with Particle Effect - Full Width */}
       <section className="w-full overflow-hidden p-0 m-0 relative">
         {/* Logo overlay */}
-        <div className="absolute top-4 left-4 z-10">
+        <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-10">
           <Image 
             src="/CPH_Trading_Academy_Logo-B2-removebg-preview.png" 
             alt="Copenhagen Trading Academy Logo" 
-            width={200} 
-            height={100} 
-            // removed 200 % scaling – now rendered at normal size
+            width={120}
+            height={60}
+            className="w-[120px] sm:w-[200px]"
+            // Responsive sizing
           />
         </div>
         <ParticleTextEffect words={["Byg Formue", "Renters Rente", "Det 8. Vidunder"]} />
@@ -47,19 +48,21 @@ export default function Home() {
         {/* Adjusted positioning for equal spacing above and below */}
         <Box
           className="absolute left-1/2 -translate-x-1/2 z-10"
-          style={{ bottom: '80px' }} // 20 px higher than previous (was ~64 px)
+          style={{ bottom: '70px' }} // Slightly higher on mobile
         >
           <Button
             variant="contained"
             size="large"
             component={Link}
             href="/calculator"
+            className="text-sm sm:text-base"
             sx={{
-              py: 1.5,
-              px: 4,
-              fontSize: "1.1rem",
+              py: { xs: 1, sm: 1.5 },
+              px: { xs: 3, sm: 4 },
+              fontSize: { xs: "0.9rem", sm: "1.1rem" },
               borderRadius: "12px",
               boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
+              minHeight: "44px", // Minimum touch target size
             }}
           >
             Beregn Økonomisk Frihed
@@ -68,10 +71,10 @@ export default function Home() {
         {/* Scroll indicator arrow */}
         <Box
           className="absolute left-1/2 -translate-x-1/2 text-white/70 select-none cursor-pointer"
-          style={{ bottom: '30px' }} // increased gap: 50 → 30 (now 50 px below the button)
+          style={{ bottom: '20px' }} // Adjusted for mobile
           onClick={handleScrollDown}
         >
-          <KeyboardArrowDownIcon sx={{ fontSize: 40 }} />
+          <KeyboardArrowDownIcon sx={{ fontSize: { xs: 32, sm: 40 } }} />
         </Box>
       </section>
 
@@ -81,7 +84,7 @@ export default function Home() {
           <AnimatedCard delay={0.1} direction="up">
             <Paper 
               elevation={24}
-              className="pt-8 sm:pt-12 px-8 sm:px-12 pb-4 backdrop-blur-md rounded-xl mb-12"
+              className="pt-6 sm:pt-8 md:pt-12 px-4 sm:px-8 md:px-12 pb-4 backdrop-blur-md rounded-xl mb-8 sm:mb-12"
               sx={{ 
                 background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
                 backdropFilter: 'blur(10px)',
@@ -89,31 +92,32 @@ export default function Home() {
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
               }}
             >
-              <Box className="flex flex-col md:flex-row items-center gap-6">
+              <Box className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
                 <Box className="flex-shrink-0 md:w-1/3">
                   <Image
                     src="/Albert-Einstein-PNG-Image-HD.png"
                     alt="Albert Einstein"
                     width={300}
                     height={400}
-                    className="rounded-lg"
+                    className="rounded-lg w-[200px] sm:w-[300px]"
                     style={{ objectFit: 'contain' }}
                   />
                 </Box>
                 <Box className="flex flex-col items-center text-center md:items-start md:text-left">
                   <FormatQuoteIcon 
                     sx={{ 
-                      fontSize: 60, 
+                      fontSize: { xs: 40, sm: 50, md: 60 }, 
                       color: 'primary.main',
                       opacity: 0.8,
-                      mb: 2
+                      mb: { xs: 1, sm: 2 }
                     }} 
                   />
                   <Typography 
-                    variant="h4" 
+                    variant="h5" 
                     component="blockquote"
-                    className="mb-6 text-white italic"
+                    className="mb-4 sm:mb-6 text-white italic"
                     sx={{ 
+                      fontSize: { xs: '1.25rem', sm: '1.5rem', md: '2rem' },
                       fontWeight: 600,
                       lineHeight: 1.4,
                       letterSpacing: '-0.01em'
@@ -122,10 +126,13 @@ export default function Home() {
                     &quot;Renters rente er verdens ottende vidunder. Den, der forstår det, tjener på det... den, der ikke gør, betaler for det.&quot;
                   </Typography>
                   <Typography 
-                    variant="h6" 
+                    variant="body1" 
                     component="cite"
                     className="text-white"
-                    sx={{ fontWeight: 500 }}
+                    sx={{ 
+                      fontSize: { xs: '0.9rem', sm: '1rem', md: '1.25rem' },
+                      fontWeight: 500 
+                    }}
                   >
                     — Albert Einstein
                   </Typography>
@@ -139,10 +146,10 @@ export default function Home() {
       {/* 7% and Tid er Din Ven Cards - Moved to be second after hero */}
       <section>
         <Container maxWidth="md">
-          <Box className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+          <Box className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
             <AnimatedCard delay={0.2} direction="left">
               <Paper 
-                className="p-6 backdrop-blur-sm rounded-xl"
+                className="p-4 sm:p-6 backdrop-blur-sm rounded-xl"
                 sx={{ 
                   background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
                   backdropFilter: 'blur(10px)',
@@ -152,15 +159,22 @@ export default function Home() {
                 <Box className="flex flex-col items-center text-center">
                   <TrendingUpIcon 
                     sx={{ 
-                      fontSize: 48, 
+                      fontSize: { xs: 36, sm: 48 }, 
                       color: 'warning.main',
-                      mb: 2
+                      mb: { xs: 1, sm: 2 }
                     }} 
                   />
-                  <Typography variant="h6" className="mb-2 text-white font-bold">
+                  <Typography 
+                    variant="h6" 
+                    className="mb-2 text-white font-bold"
+                    sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+                  >
                     20% Årligt Afkast
                   </Typography>
-                  <Typography className="text-white">
+                  <Typography 
+                    className="text-white"
+                    sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+                  >
                     5.000 kr/md over 20 år bliver til <strong>
                       <AnimatedCounter 
                         value={13441535} 
@@ -180,7 +194,7 @@ export default function Home() {
             
             <AnimatedCard delay={0.2} direction="right">
               <Paper 
-                className="p-6 backdrop-blur-sm rounded-xl"
+                className="p-4 sm:p-6 backdrop-blur-sm rounded-xl"
                 sx={{ 
                   background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
                   backdropFilter: 'blur(10px)',
@@ -190,15 +204,22 @@ export default function Home() {
                 <Box className="flex flex-col items-center text-center">
                   <AccessTimeIcon 
                     sx={{ 
-                      fontSize: 48, 
+                      fontSize: { xs: 36, sm: 48 }, 
                       color: 'success.main',
-                      mb: 2
+                      mb: { xs: 1, sm: 2 }
                     }} 
                   />
-                  <Typography variant="h6" className="mb-2 text-white font-bold">
+                  <Typography 
+                    variant="h6" 
+                    className="mb-2 text-white font-bold"
+                    sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+                  >
                     Tid er Din Ven
                   </Typography>
-                  <Typography className="text-white">
+                  <Typography 
+                    className="text-white"
+                    sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+                  >
                     Jo tidligere du starter, desto mere dramatisk bliver væksten af din investering.
                   </Typography>
                 </Box>
@@ -214,7 +235,7 @@ export default function Home() {
           <AnimatedCard delay={0.3} direction="up">
             <Paper 
               elevation={24}
-              className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
+              className="p-6 sm:p-8 md:p-12 backdrop-blur-md rounded-xl mb-8 sm:mb-12"
               sx={{ 
                 background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
                 backdropFilter: 'blur(10px)',
@@ -223,9 +244,12 @@ export default function Home() {
               }}
             >
               <Typography 
-                variant="h6" 
+                variant="body1" 
                 className="text-white mx-auto text-center"
-                sx={{ fontWeight: 400 }}
+                sx={{ 
+                  fontWeight: 400,
+                  fontSize: { xs: '0.9rem', sm: '1rem', md: '1.25rem' }
+                }}
               >
                 Oplev hvordan små, regelmæssige investeringer kan vokse til betydelige formuer over tid med renters rente effekten.
               </Typography>
@@ -241,7 +265,7 @@ export default function Home() {
           <AnimatedCard delay={0.4} direction="up">
             <Paper 
               elevation={24}
-              className="p-8 sm:p-12 rounded-xl mb-12"
+              className="p-6 sm:p-8 md:p-12 rounded-xl mb-8 sm:mb-12"
               sx={{ 
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
                 backdropFilter: 'blur(10px)',
@@ -250,10 +274,11 @@ export default function Home() {
               }}
             >
               <Typography
-                variant="h4"
+                variant="h5"
                 component="h2"
                 className="mb-6 text-black text-center"
                 sx={{
+                  fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2.125rem' },
                   fontWeight: 700,
                   mb: 2,
                   position: 'relative',
@@ -272,21 +297,29 @@ export default function Home() {
               >
                 Styrken ved Renters Rente
               </Typography>
-              <Box className="flex flex-col md:flex-row items-center gap-6">
+              <Box className="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
                 <Image
                   src="/rentes rente transparent.png"
                   alt="Renters Rente Graf"
                   width={280}
                   height={380}
-                  className="rounded-lg"
+                  className="rounded-lg w-[200px] sm:w-[280px]"
                   style={{ objectFit: 'contain' }}
                 />
                 <Box>
-                  <Typography paragraph className="text-gray-800 mb-4">
+                  <Typography 
+                    paragraph 
+                    className="text-gray-800 mb-3 sm:mb-4"
+                    sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+                  >
                     Renters rente er det finansielle fænomen, hvor du ikke kun tjener renter på din oprindelige investering, men også på de renter, du allerede har optjent.
                   </Typography>
 
-                  <Typography paragraph className="text-gray-800 mb-4">
+                  <Typography 
+                    paragraph 
+                    className="text-gray-800 mb-3 sm:mb-4"
+                    sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+                  >
                     Over tid kan denne effekt føre til eksponentiel vækst af din formue. Jo længere din investeringshorisont er, desto mere dramatisk bliver effekten.
                   </Typography>
                 </Box>
@@ -300,7 +333,7 @@ export default function Home() {
           <AnimatedCard delay={0.5} direction="up">
             <Paper 
               elevation={24}
-              className="pt-8 sm:pt-12 px-8 sm:px-12 pb-6 backdrop-blur-md rounded-xl mb-12"
+              className="pt-6 sm:pt-8 md:pt-12 px-6 sm:px-8 md:px-12 pb-4 sm:pb-6 backdrop-blur-md rounded-xl mb-8 sm:mb-12"
               sx={{ 
                 background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
                 backdropFilter: 'blur(10px)',
@@ -308,10 +341,18 @@ export default function Home() {
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
               }}
             >
-              <Typography paragraph className="text-white mb-4">
+              <Typography 
+                paragraph 
+                className="text-white mb-3 sm:mb-4"
+                sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+              >
                 Selv små månedlige bidrag kan vokse til betydelige summer over årtier, især når de investeres med konsistente afkast.
               </Typography>
-              <Typography paragraph className="text-white">
+              <Typography 
+                paragraph 
+                className="text-white"
+                sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+              >
                 Vores beregner giver dig mulighed for at visualisere denne vækst og forstå, hvordan forskellige afkastrater og investeringsperioder kan påvirke din økonomiske fremtid.
               </Typography>
             </Paper>
@@ -324,7 +365,7 @@ export default function Home() {
         <Container maxWidth="md">
           <AnimatedCard delay={0.6} direction="up">
             <Box
-              className="p-8 sm:p-12 rounded-2xl text-center mb-12"
+              className="p-6 sm:p-8 md:p-12 rounded-2xl text-center mb-8 sm:mb-12"
               sx={{ 
                 background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
                 backdropFilter: 'blur(10px)',
@@ -332,21 +373,27 @@ export default function Home() {
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
               }}
             >
-              <Box sx={{ marginBottom: '32px' }}>
+              <Box sx={{ marginBottom: { xs: '24px', sm: '32px' } }}>
                 <Typography
                   variant="h5"
                   component="h2"
                   className="text-white"
-                  sx={{ fontWeight: 700 }}
+                  sx={{ 
+                    fontWeight: 700,
+                    fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.75rem' }
+                  }}
                 >
                   Start Din Rejse Mod Økonomisk Frihed
                 </Typography>
               </Box>
               
               <Typography 
-                variant="h6" 
-                className="mb-8 text-white mx-auto text-center"
-                sx={{ fontWeight: 400 }}
+                variant="body1" 
+                className="mb-6 sm:mb-8 text-white mx-auto text-center"
+                sx={{ 
+                  fontWeight: 400,
+                  fontSize: { xs: '0.875rem', sm: '1rem', md: '1.25rem' }
+                }}
               >
                 Udnyt kraften ved renters rente og se, hvordan dine investeringer kan vokse over tid. Prøv vores beregner nu og tag det første skridt mod en sikrere økonomisk fremtid.
               </Typography>
@@ -356,14 +403,15 @@ export default function Home() {
                 size="large"
                 component={Link}
                 href="/calculator"
-                className="px-8 py-3 text-lg"
+                className="text-sm sm:text-base"
                 sx={{
-                  mt: 4,
-                  py: 1.5,
-                  px: 4,
-                  fontSize: "1.1rem",
+                  mt: { xs: 2, sm: 4 },
+                  py: { xs: 1, sm: 1.5 },
+                  px: { xs: 3, sm: 4 },
+                  fontSize: { xs: "0.9rem", sm: "1.1rem" },
                   borderRadius: "12px",
                   boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
+                  minHeight: "44px", // Minimum touch target size
                 }}
               >
                 Beregn Økonomisk Frihed
@@ -374,14 +422,15 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-black/50 py-4 mt-12">
+      <footer className="bg-black/50 py-3 sm:py-4 mt-8 sm:mt-12">
         <Container maxWidth="md">
           <Box className="flex justify-center">
             <Image
               src="/CPH_Trading_Academy_Logo-B2-removebg-preview.png"
               alt="Copenhagen Trading Academy Logo"
-              width={160}
-              height={80}
+              width={120}
+              height={60}
+              className="w-[120px] sm:w-[160px]"
             />
           </Box>
         </Container>
