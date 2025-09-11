@@ -11,9 +11,15 @@ import Image from "next/image"
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen">
       {/* Fixed rainbow WebGL background behind all content */}
-      <div className="fixed inset-0 -z-10">
+      {/* Some Tailwind setups ignore negative z utilities.
+         Use an inline style with zIndex -1 to guarantee the
+         shader stays behind every other element. */}
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{ zIndex: -1 }}
+      >
         <WebGLShader />
       </div>
       {/* Hero Section with Particle Effect - Full Width */}
@@ -32,7 +38,7 @@ export default function Home() {
       </section>
 
       {/* Hero Content Section - Now in a Card */}
-      <section className="py-16 bg-gradient-to-b from-slate-900 to-slate-800">
+      <section className="py-16">
         <Container maxWidth="md">
           <Paper 
             elevation={24}
@@ -55,7 +61,7 @@ export default function Home() {
       </section>
 
       {/* Einstein Quote Section */}
-      <section className="py-16 bg-gradient-to-b from-slate-900 to-slate-800">
+      <section className="py-16">
         <Container maxWidth="md">
           <Paper 
             elevation={24}
@@ -113,7 +119,7 @@ export default function Home() {
       </section>
 
       {/* Story Section - Restructured to Single Column */}
-      <section className="py-16 bg-gradient-to-b from-slate-800 to-slate-900">
+      <section className="py-16">
         <Container maxWidth="md">
           {/* Styrken ved Renters Rente Card */}
           <Paper 
@@ -225,7 +231,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-b from-slate-900 to-slate-800">
+      <section className="py-16">
         <Container maxWidth="md">
           <Box 
             className="p-8 sm:p-12 rounded-2xl text-center"
