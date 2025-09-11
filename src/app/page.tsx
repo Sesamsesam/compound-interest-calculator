@@ -37,7 +37,8 @@ export default function Home() {
         {/* Hero CTA Button (overlay at bottom-center of hero) */}
         {/* Adjusted positioning for equal spacing above and below */}
         <Box
-          className="absolute left-1/2 -translate-x-1/2 bottom-16 z-10"
+          className="absolute left-1/2 -translate-x-1/2 z-10"
+          style={{ bottom: '80px' }} // 20 px higher than previous (was ~64 px)
         >
           <Button
             variant="contained"
@@ -54,6 +55,13 @@ export default function Home() {
           >
             Beregn Økonomisk Frihed
           </Button>
+        </Box>
+        {/* Scroll indicator arrow */}
+        <Box
+          className="absolute left-1/2 -translate-x-1/2 text-white/70 select-none"
+          style={{ bottom: '70px' }} // 10 px below the button
+        >
+          ˯
         </Box>
       </section>
 
