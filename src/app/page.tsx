@@ -37,25 +37,6 @@ export default function Home() {
             >
               Oplev hvordan små, regelmæssige investeringer kan vokse til betydelige formuer over tid med renters rente effekten.
             </Typography>
-            
-            <Button 
-              variant="contained" 
-              size="large" 
-              component={Link}
-              href="/calculator"
-              startIcon={<CalculateIcon />}
-              className="mt-8 px-8 py-3 text-lg"
-              sx={{ 
-                mt: 6,
-                py: 1.5,
-                px: 4,
-                fontSize: '1.1rem',
-                borderRadius: '12px',
-                boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.5)'
-              }}
-            >
-              Prøv Beregneren
-            </Button>
           </Box>
         </Container>
       </section>
