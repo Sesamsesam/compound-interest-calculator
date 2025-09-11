@@ -32,6 +32,7 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore"
 import NavigateNextIcon from "@mui/icons-material/NavigateNext"
 import CompoundInterestChart from "@/components/CompoundInterestChart"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
+import AnimatedValue from "@/components/AnimatedValue"
 
 // Calculation types
 interface YearlyData {
@@ -647,7 +648,7 @@ export default function Calculator() {
                   boxShadow: theme.shadows[4],
                   transition: 'transform 0.3s ease-in-out',
                   '&:hover': {
-                    transform: 'translateY(0px)',
+                    transform: 'scale(1.02)',
                     boxShadow: theme.shadows[8],
                   }
                 }}
@@ -657,7 +658,7 @@ export default function Calculator() {
                     Total Investeret
                   </Typography>
                   <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
-                    {formatDKK(totalContributed)}
+                    <AnimatedValue value={totalContributed} formatter={formatDKK} />
                   </Typography>
                   <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
                     Startkapital + indbetalinger
@@ -684,7 +685,7 @@ export default function Calculator() {
                   boxShadow: theme.shadows[4],
                   transition: 'transform 0.3s ease-in-out',
                   '&:hover': {
-                    transform: 'translateY(0px)',
+                    transform: 'scale(1.02)',
                     boxShadow: theme.shadows[8],
                   }
                 }}
@@ -694,7 +695,7 @@ export default function Calculator() {
                     Slutbalance
                   </Typography>
                   <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
-                    {formatDKK(finalBalance)}
+                    <AnimatedValue value={finalBalance} formatter={formatDKK} />
                   </Typography>
                   <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
                     Efter {years} år
@@ -746,7 +747,8 @@ export default function Calculator() {
               {/* Chart wrapper – extra bottom padding & taller mobile height to avoid overflow */}
               <Box
                 sx={{
-                  height: { xs: 350, md: 420 },
+                  /* Increased mobile height so x-axis labels aren’t cut off */
+                  height: { xs: 450, md: 420 },
                   pb: { xs: 4, md: 5 },           /* increased space below grid/axes */
                   overflow: 'hidden',             /* ensure no horizontal bleed */
                 }}
