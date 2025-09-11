@@ -26,6 +26,7 @@ const Navigation = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [scrolled, setScrolled] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -34,6 +35,11 @@ const Navigation = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  // Set mounted state after component mounts
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Handle scroll effect for AppBar
   useEffect(() => {
@@ -58,12 +64,12 @@ const Navigation = () => {
   return (
     <AppBar 
       position="sticky" 
-      elevation={scrolled ? 4 : 0}
+      elevation={mounted && scrolled ? 4 : 0}
       sx={{
         backgroundColor: "black",
-        backdropFilter: scrolled ? "blur(8px)" : "none",
+        backdropFilter: mounted && scrolled ? "blur(8px)" : "none",
         transition: "all 0.3s ease",
-        borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.1)" : "none",
+        borderBottom: mounted && scrolled ? "1px solid rgba(255, 255, 255, 0.1)" : "none",
       }}
     >
       <Container maxWidth="lg">
