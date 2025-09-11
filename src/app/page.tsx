@@ -3,7 +3,6 @@
 import { Container, Typography, Button, Box, Paper } from "@mui/material"
 import { ParticleTextEffect } from "@/components/ParticleTextEffect"
 import { WebGLShader } from "@/components/ui/web-gl-shader"
-import CalculateIcon from "@mui/icons-material/Calculate"
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote"
 import Link from "next/link"
@@ -35,6 +34,24 @@ export default function Home() {
           />
         </div>
         <ParticleTextEffect words={["Byg Formue", "Renters Rente", "Det 8. Vidunder"]} />
+        {/* Hero CTA Button */}
+        <Box className="w-full flex justify-center mt-6">
+          <Button
+            variant="contained"
+            size="large"
+            component={Link}
+            href="/calculator"
+            sx={{
+              py: 1.5,
+              px: 4,
+              fontSize: "1.1rem",
+              borderRadius: "12px",
+              boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
+            }}
+          >
+            Uderegn Økonomisk Frihed
+          </Button>
+        </Box>
       </section>
 
       {/* Hero Content Section - Now in a Card */}
@@ -135,7 +152,7 @@ export default function Home() {
             }}
           >
             <Typography 
-              variant="h3" 
+              variant="h4" 
               component="h2" 
               className="mb-6 text-white text-center"
               sx={{ 
@@ -255,8 +272,8 @@ export default function Home() {
       {/* CTA Section */}
       <section>
         <Container maxWidth="md">
-          <Box 
-            className="p-8 sm:p-12 rounded-2xl text-center"
+          <Box
+            className="p-8 sm:p-12 rounded-2xl text-center mb-12"
             sx={{ 
               background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
               backdropFilter: 'blur(10px)',
@@ -264,9 +281,9 @@ export default function Home() {
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
             }}
           >
-            <Typography 
-              variant="h3" 
-              component="h2" 
+            <Typography
+              variant="h5"
+              component="h2"
               className="mb-6 text-white"
               sx={{ fontWeight: 700 }}
             >
@@ -281,26 +298,40 @@ export default function Home() {
               Udnyt kraften ved renters rente og se, hvordan dine investeringer kan vokse over tid. Prøv vores beregner nu og tag det første skridt mod en sikrere økonomisk fremtid.
             </Typography>
             
-            <Button 
-              variant="contained" 
-              size="large" 
+            <Button
+              variant="contained"
+              size="large"
               component={Link}
               href="/calculator"
-              startIcon={<CalculateIcon />}
               className="px-8 py-3 text-lg"
-              sx={{ 
+              sx={{
+                mt: 4,
                 py: 1.5,
                 px: 4,
-                fontSize: '1.1rem',
-                borderRadius: '12px',
-                boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.5)'
+                fontSize: "1.1rem",
+                borderRadius: "12px",
+                boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
               }}
             >
-              Prøv Renters Rente Beregneren
+              Uderegn Økonomisk Frihed
             </Button>
           </Box>
         </Container>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-black py-4 mt-12">
+        <Container maxWidth="md">
+          <Box className="flex justify-center">
+            <Image
+              src="/CPH_Trading_Academy_Logo-B2-removebg-preview.png"
+              alt="Copenhagen Trading Academy Logo"
+              width={160}
+              height={80}
+            />
+          </Box>
+        </Container>
+      </footer>
     </div>
   );
 }
