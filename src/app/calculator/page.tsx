@@ -370,7 +370,14 @@ export default function Calculator() {
   };
   
   return (
-    <Container maxWidth="lg" sx={{ py: 4, overflowX: 'hidden', bgcolor: '#000000'}}>
+    <>
+      {/* Full-width black wrapper to eliminate side colors */}
+      <Box sx={{ width: '100%', bgcolor: '#000000' }}>
+        {/* Stretch Container to full viewport width */}
+        <Container
+          maxWidth={false}
+          sx={{ py: 4, overflowX: 'hidden', bgcolor: '#000000' }}
+        >
       <Typography 
         variant="h3" 
         component="h1" 
@@ -843,5 +850,7 @@ export default function Calculator() {
         </Box>
       </Box>
     </Container>
+      </Box>
+    </>
   );
 }
