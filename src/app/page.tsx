@@ -42,10 +42,11 @@ export default function Home() {
         <Container maxWidth="md">
           <Paper 
             elevation={24}
-            className="p-8 sm:p-12 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl"
+            className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
             sx={{ 
-              background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8))',
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
               backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
             }}
           >
@@ -65,10 +66,11 @@ export default function Home() {
         <Container maxWidth="md">
           <Paper 
             elevation={24}
-            className="p-8 sm:p-12 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl"
+            className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
             sx={{ 
-              background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8))',
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
               backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
             }}
           >
@@ -124,10 +126,11 @@ export default function Home() {
           {/* Styrken ved Renters Rente Card */}
           <Paper 
             elevation={24}
-            className="p-8 sm:p-12 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl mb-12"
+            className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
             sx={{ 
-              background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8))',
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
               backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
             }}
           >
@@ -166,10 +169,13 @@ export default function Home() {
           </Paper>
           
           {/* 7% and Tid er Din Ven Cards - Side by Side but in Single Column Flow */}
-          <Box className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <Box className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
             <Paper 
-              className="p-6 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl"
+              className="p-6 backdrop-blur-sm rounded-xl"
               sx={{ 
+                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
                 transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
                 '&:hover': {
                   transform: 'translateY(-8px)',
@@ -195,8 +201,11 @@ export default function Home() {
             </Paper>
             
             <Paper 
-              className="p-6 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl"
+              className="p-6 backdrop-blur-sm rounded-xl"
               sx={{ 
+                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
                 transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
                 '&:hover': {
                   transform: 'translateY(-8px)',
@@ -225,10 +234,11 @@ export default function Home() {
           {/* Additional Insight Card (moved text) */}
           <Paper 
             elevation={24}
-            className="mt-12 p-8 sm:p-12 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl"
+            className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
             sx={{ 
-              background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8))',
+              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
               backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
             }}
           >
