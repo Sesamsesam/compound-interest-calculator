@@ -726,14 +726,14 @@ export default function Calculator() {
               <TableContainer sx={{ maxHeight: 400 }}>
                 <Table stickyHeader size="small">
                   <TableHead>
-                    <TableRow>
-                      <TableCell>År</TableCell>
-                      <TableCell align="right">Startbalance</TableCell>
-                      <TableCell align="right">Bidrag</TableCell>
-                      <TableCell align="right">Renter</TableCell>
-                      <TableCell align="right">Total Investeret</TableCell>
-                      <TableCell align="right">Slutbalance</TableCell>
-                    </TableRow>
+                  <TableRow>
+  <TableCell sx={{ backgroundColor: '#000B24', color: 'white' }}>År</TableCell>
+  <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Startbalance</TableCell>
+  <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Bidrag</TableCell>
+  <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Renter</TableCell>
+  <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Total Investeret</TableCell>
+  <TableCell align="right" sx={{ backgroundColor: '#000B24', color: 'white' }}>Slutbalance</TableCell>
+</TableRow>
                   </TableHead>
                   <TableBody>
                     {yearlyData.map((row) => (

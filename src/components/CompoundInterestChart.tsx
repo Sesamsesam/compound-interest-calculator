@@ -117,10 +117,18 @@ const CompoundInterestChart = ({
   // Extract end balances for line chart
   const endBalances = yearlyData.map(data => data.endBalance)
   
-  // Extract contributions and interests for stacked chart
+  // Extract data for stacked chart
   const contributions = yearlyData.map(data => data.contribution)
   const interests = yearlyData.map(data => data.interest)
   const cumulativeContributions = yearlyData.map(data => data.totalContributed)
+  
+  // Calculate cumulative interest for each year
+  const cumulativeInterests = yearlyData.map((data, index) => {
+    return data.endBalance - data.totalContributed;
+  });
+  
+  // Calculate annual interest only (not cumulative)
+  const annualInterests = yearlyData.map((data) => data.interest);
   
   // Calculate reference data for dynamic benchmark rates
   const principal = yearlyData[0].endBalance;
@@ -214,25 +222,59 @@ const CompoundInterestChart = ({
     ],
   }
 
-  // Stacked bar chart data
+  // Stacked bar chart data - updated with three segments
   const stackedChartData: ChartData<'bar'> = {
     labels: years,
     datasets: [
       {
-        label: 'Indbetalinger',
-        data: contributions,
-        backgroundColor: theme.palette.grey[600],
-        hoverBackgroundColor: theme.palette.grey[500],
+        label: 'Akkumulerede Indbetalinger',
+        data: cumulativeContributions,
+        backgroundColor: 'linear-gradient(135deg, #3b82f6, #1e40af)', // Blue gradient
+        hoverBackgroundColor: '#60a5fa', // Lighter blue on hover
         stack: 'stack0',
-        barPercentage: 0.6,
+        barPercentage: 0.7,
+        borderRadius: {
+          bottomLeft: 6,
+          bottomRight: 6,
+          topLeft: 0,
+          topRight: 0,
+        },
+        // Use gradient for blue
+        backgroundColor: function(context) {
+          const chart = context.chart;
+          const {ctx, chartArea} = chart;
+          if (!chartArea) return '#3b82f6';
+          
+          const gradient = ctx.createLinearGradient(
+            chartArea.left, 0, chartArea.right, 0
+          );
+          gradient.addColorStop(0, '#3b82f6');
+          gradient.addColorStop(1, '#1e40af');
+          return gradient;
+        },
       },
       {
-        label: 'Renter',
-        data: interests,
-        backgroundColor: theme.palette.primary.main,
-        hoverBackgroundColor: theme.palette.primary.light,
+        label: 'Årlig Rente',
+        data: annualInterests,
+        backgroundColor: '#10b981', // Green
+        hoverBackgroundColor: '#34d399', // Lighter green on hover
         stack: 'stack0',
-        barPercentage: 0.6,
+        barPercentage: 0.7,
+        borderRadius: 0, // No radius for middle segment
+      },
+      {
+        label: 'Akkumuleret Rente',
+        data: cumulativeInterests,
+        backgroundColor: '#f59e0b', // Gold/yellow
+        hoverBackgroundColor: '#fbbf24', // Lighter gold on hover
+        stack: 'stack0',
+        barPercentage: 0.7,
+        borderRadius: {
+          bottomLeft: 0,
+          bottomRight: 0,
+          topLeft: 6,
+          topRight: 6,
+        },
       }
     ],
   }
@@ -321,7 +363,28 @@ const CompoundInterestChart = ({
                 `Optjent Procent: ${cumulativeReturn.toFixed(1)}%`
               ];
             } else {
-              // For stacked chart, keep original format
+              // Enhanced bar chart tooltips
+              const yearData = yearlyData[year];
+              if (!yearData) return `${label}: ${formatDKK(value)}`;
+              
+              if (label === 'Akkumulerede Indbetalinger') {
+                return [
+                  `${label}: ${formatDKK(value)}`,
+                  `Indskud dette år: ${formatDKK(yearData.contribution)}`
+                ];
+              } else if (label === 'Årlig Rente') {
+                return [
+                  `${label}: ${formatDKK(value)}`,
+                  `Afkast dette år: ${annualRate.toFixed(1)}%`
+                ];
+              } else if (label === 'Akkumuleret Rente') {
+                const totalValue = yearData.endBalance;
+                return [
+                  `${label}: ${formatDKK(value)}`,
+                  `Total Værdi: ${formatDKK(totalValue)}`,
+                  `Optjent Procent: ${calculateCumulativeReturn(totalValue, yearData.totalContributed).toFixed(1)}%`
+                ];
+              }
               return `${label}: ${formatDKK(value)}`;
             }
           }
@@ -423,6 +486,11 @@ const CompoundInterestChart = ({
         stacked: true,
       },
     },
+    elements: {
+      bar: {
+        borderWidth: 0,
+      }
+    }
   };
 
   // Effect to update chart when data changes
