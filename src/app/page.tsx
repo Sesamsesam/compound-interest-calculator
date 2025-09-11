@@ -223,18 +223,17 @@ export default function Home() {
           {/* Styrken ved Renters Rente Card */}
           <Paper 
             elevation={24}
-            className="p-8 sm:p-12 backdrop-blur-md rounded-xl mb-12"
+            className="p-8 sm:p-12 rounded-xl mb-12"
             sx={{ 
-              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2))',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+              backgroundColor: '#ffffff',
+              border: '1px solid rgba(0,0,0,0.1)',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
             }}
           >
             <Typography
               variant="h4"
               component="h2"
-              className="mb-6 text-white text-center"
+              className="mb-6 text-black text-center"
               sx={{
                 fontWeight: 700,
                 mb: 2,
@@ -256,7 +255,7 @@ export default function Home() {
             </Typography>
             <Box className="flex flex-col md:flex-row items-center gap-6">
               <Image
-                src="/rentes renter.png"
+                src="/rentes rente transparent.png"
                 alt="Renters Rente Graf"
                 width={280}
                 height={380}
@@ -264,11 +263,11 @@ export default function Home() {
                 style={{ objectFit: 'contain' }}
               />
               <Box>
-                <Typography paragraph className="text-slate-300 mb-4">
+                <Typography paragraph className="text-gray-800 mb-4">
                   Renters rente er det finansielle fænomen, hvor du ikke kun tjener renter på din oprindelige investering, men også på de renter, du allerede har optjent.
                 </Typography>
 
-                <Typography paragraph className="text-slate-300 mb-4">
+                <Typography paragraph className="text-gray-800 mb-4">
                   Over tid kan denne effekt føre til eksponentiel vækst af din formue. Jo længere din investeringshorisont er, desto mere dramatisk bliver effekten.
                 </Typography>
               </Box>
