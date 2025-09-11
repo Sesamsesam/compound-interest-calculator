@@ -32,7 +32,6 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore"
 import NavigateNextIcon from "@mui/icons-material/NavigateNext"
 import CompoundInterestChart from "@/components/CompoundInterestChart"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
-import AnimatedValue from "@/components/AnimatedValue"
 
 // Calculation types
 interface YearlyData {
@@ -658,7 +657,7 @@ export default function Calculator() {
                     Total Investeret
                   </Typography>
                   <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
-                    <AnimatedValue value={totalContributed} formatter={formatDKK} />
+                    {formatDKK(totalContributed)}
                   </Typography>
                   <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
                     Startkapital + indbetalinger
@@ -695,7 +694,7 @@ export default function Calculator() {
                     Slutbalance
                   </Typography>
                   <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
-                    <AnimatedValue value={finalBalance} formatter={formatDKK} />
+                    {formatDKK(finalBalance)}
                   </Typography>
                   <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
                     Efter {years} år
