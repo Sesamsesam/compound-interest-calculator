@@ -260,7 +260,6 @@ export default function Home() {
                 className="rounded-lg"
                 sx={{
                   backgroundColor: '#ffffff',
-                  p: 1.5,
                   borderRadius: 2,
                   display: 'flex',
                   alignItems: 'center',
@@ -270,8 +269,8 @@ export default function Home() {
                 <Image
                   src="/rentes rente transparent.png"
                   alt="Renters Rente Graf"
-                  width={220}
-                  height={300}
+                  width={280}
+                  height={380}
                   style={{ objectFit: 'contain' }}
                 />
               </Box>
