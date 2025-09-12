@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -58,6 +58,7 @@ interface CompoundInterestChartProps {
   chartType: 'line' | 'stacked'
   annualRate: number
   totalInterest: number
+  shouldPulse?: boolean // Added shouldPulse prop
 }
 
 // Helper function to calculate data with different rates
@@ -107,9 +108,14 @@ const CompoundInterestChart = ({
   chartType,
   annualRate,
   totalInterest,
+  shouldPulse = false, // Default to false
 }: CompoundInterestChartProps) => {
   const chartRef = useRef<ChartJS>(null)
   const theme = useTheme()
+  
+  // State for pulsing line color
+  const [lineColor, setLineColor] = useState(theme.palette.success.main)
+  const [pointColor, setPointColor] = useState(theme.palette.success.main)
 
   // Extract years for labels
   const years = yearlyData.map(data => data.year)
@@ -153,6 +159,62 @@ const CompoundInterestChart = ({
     yearlyData[yearlyData.length - 1]?.totalContributed || 0
   );
 
+  // Gold color for pulsing
+  const goldColor = '#ffd700';
+  
+  // Effect for pulsing line color animation
+  useEffect(() => {
+    if (!shouldPulse || chartType !== 'line') return;
+    
+    // Animation timing values
+    const animationDuration = 2000; // 2 seconds per cycle
+    const fps = 60;
+    const interval = 1000 / fps;
+    const steps = animationDuration / interval;
+    
+    let currentStep = 0;
+    let direction = 1; // 1 = green to gold, -1 = gold to green
+    
+    const animationInterval = setInterval(() => {
+      currentStep += direction;
+      
+      // Calculate progress (0 to 1)
+      const progress = Math.sin((currentStep / steps) * Math.PI) * 0.5 + 0.5;
+      
+      // Interpolate between green and gold
+      const r = Math.round(16 + (255 - 16) * progress); // 10b981 to ffd700
+      const g = Math.round(185 + (215 - 185) * progress);
+      const b = Math.round(129 - 129 * progress);
+      
+      const newColor = `rgb(${r}, ${g}, ${b})`;
+      setLineColor(newColor);
+      setPointColor(newColor);
+      
+      // Update the chart
+      const chart = chartRef.current;
+      if (chart && chart.data.datasets[0]) {
+        chart.data.datasets[0].borderColor = newColor;
+        chart.data.datasets[0].pointBackgroundColor = newColor;
+        chart.update('none'); // Update without animation for smoother effect
+      }
+      
+    }, interval);
+    
+    return () => {
+      clearInterval(animationInterval);
+      // Reset to green when unmounting or when shouldPulse becomes false
+      setLineColor(theme.palette.success.main);
+      setPointColor(theme.palette.success.main);
+      
+      const chart = chartRef.current;
+      if (chart && chart.data.datasets[0]) {
+        chart.data.datasets[0].borderColor = theme.palette.success.main;
+        chart.data.datasets[0].pointBackgroundColor = theme.palette.success.main;
+        chart.update();
+      }
+    };
+  }, [shouldPulse, chartType, theme.palette.success.main]);
+
   // Line chart data
   const lineChartData: ChartData<'line'> = {
     labels: years,
@@ -160,14 +222,14 @@ const CompoundInterestChart = ({
       {
         label: `Din (${annualRate.toFixed(1)}%)`,
         data: endBalances,
-        // Switched to green
-        borderColor: theme.palette.success.main,
-        backgroundColor: `${theme.palette.success.main}33`, // 20 % opacity
+        // Use dynamic color from state (will pulse if shouldPulse is true)
+        borderColor: lineColor,
+        backgroundColor: `${lineColor}33`, // 20% opacity
         fill: true,
         tension: 0.3,
         pointRadius: 3,
         pointHoverRadius: 6,
-        pointBackgroundColor: theme.palette.success.main,
+        pointBackgroundColor: pointColor,
         borderWidth: 2,
       },
       {
@@ -196,10 +258,11 @@ const CompoundInterestChart = ({
           borderWidth: 1.5,
           borderDash: [3, 3],
         },
+        /* Blue comes *before* Yellow */
         {
-          label: `${refRate1.toFixed(1)}%`,
-          data: refData1,
-          borderColor: theme.palette.warning.main, // Yellow
+          label: `${refRate2.toFixed(1)}%`,
+          data: refData2,
+          borderColor: theme.palette.info.main, // Blue
           backgroundColor: 'transparent',
           tension: 0.3,
           pointRadius: 3,
@@ -208,9 +271,9 @@ const CompoundInterestChart = ({
           borderDash: [3, 3],
         },
         {
-          label: `${refRate2.toFixed(1)}%`,
-          data: refData2,
-          borderColor: theme.palette.info.main, // Blue
+          label: `${refRate1.toFixed(1)}%`,
+          data: refData1,
+          borderColor: theme.palette.warning.main, // Yellow
           backgroundColor: 'transparent',
           tension: 0.3,
           pointRadius: 3,
@@ -500,7 +563,7 @@ const CompoundInterestChart = ({
     if (chart) {
       chart.update();
     }
-  }, [yearlyData, chartType, annualRate]);
+  }, [yearlyData, chartType, annualRate, shouldPulse]);
 
   return (
     <Box sx={{ width: '100%', height: '100%', minHeight: '400px' }}>

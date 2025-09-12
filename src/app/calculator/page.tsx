@@ -692,83 +692,63 @@ export default function Calculator() {
                 {/* --- Total Investeret ------------------------------------------------ */}
                 <Box sx={{ 
                   width: '100%', 
-                  flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.333% - 12px)' },
+                  /* Only blue card remains – make it full-width & slimmer */
+                  flexBasis: '100%',
                   flexGrow: 1,
                   position: 'relative',
                   borderRadius: 2
                 }}>
                   <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
-                  <Card 
-                    sx={{ 
+                  <Card
+                    sx={{
                       height: '100%',
-                      /* Cool blue gradient */
-                      background: 'linear-gradient(135deg, #3b82f6, #1e40af)',
+                      /* Match “Investeringsparametre” styling */
+                      background: 'rgba(15, 23, 42, 0.8)',
                       borderRadius: 2,
-                      boxShadow: theme.shadows[4],
-                      transition: 'transform 0.3s ease-in-out',
+                      border: '1px solid rgba(255, 215, 0, 0.3)',
+                      boxShadow: theme.shadows[3],   /* keep subtle shadow */
+                      /* Explicitly remove any hover-lift / shadow grow */
                       '&:hover': {
-                        transform: 'scale(1.02)',
-                        boxShadow: theme.shadows[8],
-                      }
+                        transform: 'none',
+                        boxShadow: theme.shadows[3],
+                      },
                     }}
                   >
-                    <CardContent>
-                      <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }} gutterBottom>
-                        Total Investeret
-                      </Typography>
-                      <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', color: 'white' }}>
-                        {formatDKK(totalContributed)}
-                      </Typography>
-                      <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
-                        Startkapital + indbetalinger
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Box>
-
-                {/* --- Slutbalance ------------------------------------------------------ */}
-                <Box sx={{ 
-                  width: '100%', 
-                  flexBasis: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(50% - 12px)' },
-                  flexGrow: 1,
-                  position: 'relative',
-                  borderRadius: 2
-                }}>
-                  <GlowingEffect disabled={false} proximity={100} spread={50} blur={0} borderWidth={2} glow={true} />
-                  <Card 
-                    sx={{ 
-                      height: '100%',
-                      /* Success green gradient */
-                      background: 'linear-gradient(135deg, #10b981, #059669)',
-                      borderRadius: 2,
-                      boxShadow: theme.shadows[4],
-                      transition: 'transform 0.3s ease-in-out',
-                      '&:hover': {
-                        transform: 'scale(1.02)',
-                        boxShadow: theme.shadows[8],
-                      }
-                    }}
-                  >
-                    <CardContent>
-                      <Typography variant="subtitle2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }} gutterBottom>
-                        Slutbalance
-                      </Typography>
+                    {/* Center content vertically & horizontally */}
+                    <CardContent
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        py: { xs: 1.5, sm: 2 },   /* equal top & bottom padding */
+                        px: { xs: 1.5, sm: 2 },
+                      }}
+                    >
                       <Typography
-                        variant="h5"
-                        component="div"
-                        className="pulse-target-balance-white"
-                        sx={{ fontWeight: 'bold', color: 'white' }}
+                        variant="subtitle2"
+                        sx={{
+                          color: 'white',
+                          fontWeight: 500,
+                          lineHeight: 1.4,
+                          textAlign: 'center',
+                        }}
                       >
-                        {formatDKK(finalBalance)}
-                      </Typography>
-                      <Typography variant="body2" sx={{ mt: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
-                        Efter {years} år
+                        Total Investeret&nbsp;|&nbsp;Startkapital&nbsp;+&nbsp;Indbetalinger:&nbsp;
+                        <Box 
+                          component="span" 
+                          sx={{ 
+                            fontWeight: 700,
+                            color: theme.palette.primary.main  /* slider blue */
+                          }}
+                        >
+                          {formatDKK(totalContributed)}
+                        </Box>
                       </Typography>
                     </CardContent>
                   </Card>
                 </Box>
 
-                {/* Third summary card removed */}
+                {/* Green Slutbalance card removed – content moved to chart */}
               </Box>
               
               {/* Chart Section */}
@@ -814,29 +794,96 @@ export default function Calculator() {
                   <Box
                     sx={{
                       /* Increased mobile height so x-axis labels aren't cut off */
-                      height: { xs: 450, md: 420 },
-                      pb: { xs: 4, md: 5 },           /* increased space below grid/axes */
+                      /* Responsive height & padding: more on narrow screens */
+                      height: { xs: 540, sm: 480, md: 420 },
+                      pb: { xs: 9,  sm: 7,  md: 4 }, /* prevent cutoff on xs/sm, compact on md+ */
                       overflow: 'hidden',             /* ensure no horizontal bleed */
                     }}
                   >
-                    <Box sx={{ mb: 2 }}>
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontWeight: 600, color: theme.palette.text.secondary }}
-                      >
-                        Total Procent Optjent: {interestPercentage.toFixed(1)}%
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        className="pulse-target-interest"
+                    {/* ----- Two-column KPI layout with perfect vertical alignment ----- */}
+                    <Box 
+                      sx={{ 
+                        mb: 2,
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'flex-start',
+                        columnGap: { xs: '2rem', sm: '5rem' },
+                        rowGap: 1,
+                        alignItems: 'baseline' /* Align items by text baseline */
+                      }}
+                    >
+                      {/* Left column – Total procent */}
+                      <Box 
                         sx={{ 
-                          fontWeight: 'bold', 
-                          color: theme.palette.success.main,
-                          display: 'inline-block'
+                          flex: '0 1 auto', 
+                          minWidth: 160,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          height: '100%' /* Ensure both columns have same height */
                         }}
                       >
-                        {formatDKK(totalInterest)}
-                      </Typography>
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ 
+                            fontWeight: 600, 
+                            color: theme.palette.text.secondary,
+                            fontSize: { xs: '0.85rem', sm: '0.9rem' },
+                            mb: 1 /* Consistent margin for both columns */
+                          }}
+                        >
+                          Total Procent Optjent: {interestPercentage.toFixed(1)}%
+                        </Typography>
+                        <Typography
+                          variant="h5"
+                          className="pulse-target-interest"
+                          sx={{ 
+                            fontWeight: 'bold', 
+                            color: theme.palette.success.main,
+                            display: 'inline-block',
+                            fontSize: { xs: '1.1rem', sm: '1.25rem' },
+                            lineHeight: 1.2 /* Consistent line height */
+                          }}
+                        >
+                          {formatDKK(totalInterest)}
+                        </Typography>
+                      </Box>
+
+                      {/* Right column – Slutbalance */}
+                      <Box 
+                        sx={{ 
+                          flex: '0 1 auto', 
+                          minWidth: 160, 
+                          textAlign: 'left',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          height: '100%' /* Ensure both columns have same height */
+                        }}
+                      >
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ 
+                            fontWeight: 600, 
+                            color: theme.palette.text.secondary,
+                            fontSize: { xs: '0.85rem', sm: '0.9rem' },
+                            mb: 1 /* Consistent margin for both columns */
+                          }}
+                        >
+                          Slutbalance efter {years} år
+                        </Typography>
+                        <Typography
+                          variant="h5"
+                          className="pulse-target-interest"
+                          sx={{ 
+                            fontWeight: 'bold', 
+                            color: theme.palette.success.main,
+                            display: 'inline-block',
+                            fontSize: { xs: '1.1rem', sm: '1.25rem' },
+                            lineHeight: 1.2 /* Consistent line height */
+                          }}
+                        >
+                          {formatDKK(finalBalance)}
+                        </Typography>
+                      </Box>
                     </Box>
                     
                     <CompoundInterestChart 
@@ -844,6 +891,7 @@ export default function Calculator() {
                       chartType={chartType} 
                       annualRate={annualRate}
                       totalInterest={totalInterest}
+                      shouldPulse={shouldPulse}
                     />
                   </Box>
                 </Paper>
@@ -960,11 +1008,12 @@ export default function Calculator() {
         }
         
         /* Parent-controlled animations for perfect synchronization */
-        .pulse-parent .pulse-target-interest {
+        .pulse-parent .pulse-target-interest,
+        .pulse-parent .pulse-target-balance-green {
           animation: goldPulse 2s infinite;
         }
 
-        /* White base pulse for Slutbalance number */
+        /* White base pulse for Slutbalance number - kept for backwards compatibility */
         @keyframes whitePulse {
           0% {
             color: #ffffff;
