@@ -165,43 +165,41 @@ const CompoundInterestChart = ({
   // Effect for pulsing line color animation
   useEffect(() => {
     if (!shouldPulse || chartType !== 'line') return;
-    
-    // Animation timing values
-    const animationDuration = 2000; // 2 seconds per cycle
-    const fps = 60;
-    const interval = 1000 / fps;
-    const steps = animationDuration / interval;
-    
-    let currentStep = 0;
-    let direction = 1; // 1 = green to gold, -1 = gold to green
-    
-    const animationInterval = setInterval(() => {
-      currentStep += direction;
-      
-      // Calculate progress (0 to 1)
-      const progress = Math.sin((currentStep / steps) * Math.PI) * 0.5 + 0.5;
-      
-      // Interpolate between green and gold
-      const r = Math.round(16 + (255 - 16) * progress); // 10b981 to ffd700
-      const g = Math.round(185 + (215 - 185) * progress);
-      const b = Math.round(129 - 129 * progress);
-      
-      const newColor = `rgb(${r}, ${g}, ${b})`;
-      setLineColor(newColor);
-      setPointColor(newColor);
-      
-      // Update the chart
+
+    // Helper that sets both line & point colours and triggers chart update.
+    const applyColor = (clr: string, silent = false) => {
+      setLineColor(clr);
+      setPointColor(clr);
+
       const chart = chartRef.current;
       if (chart && chart.data.datasets[0]) {
-        chart.data.datasets[0].borderColor = newColor;
-        chart.data.datasets[0].pointBackgroundColor = newColor;
-        chart.update('none'); // Update without animation for smoother effect
+        chart.data.datasets[0].borderColor = clr;
+        chart.data.datasets[0].pointBackgroundColor = clr;
+        chart.update(silent ? 'none' : undefined);
       }
-      
-    }, interval);
-    
+    };
+
+    const timeouts: NodeJS.Timeout[] = [];
+
+    // One cycle = quick double-wink (0-300 ms) + 3 s pause ≈ 3.3 s
+    const cycle = () => {
+      // Wink 1
+      applyColor(goldColor, true);                       // t = 0 ms
+      timeouts.push(setTimeout(() => applyColor(theme.palette.success.main, true), 100));  // t = 100 ms
+      // Wink 2
+      timeouts.push(setTimeout(() => applyColor(goldColor, true), 200));                   // t = 180 ms
+      timeouts.push(setTimeout(() => applyColor(theme.palette.success.main, true), 300));  // t = 300 ms
+      // Rest of cycle is green (pause)
+    };
+
+    // Kick off initial cycle immediately
+    cycle();
+    // Repeat every 3.3 s  (0.3 s blink + 3 s pause)
+    const intervalId = setInterval(cycle, 5000);
+
     return () => {
-      clearInterval(animationInterval);
+      clearInterval(intervalId);
+      timeouts.forEach(t => clearTimeout(t));
       // Reset to green when unmounting or when shouldPulse becomes false
       setLineColor(theme.palette.success.main);
       setPointColor(theme.palette.success.main);
