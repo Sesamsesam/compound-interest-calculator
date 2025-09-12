@@ -12,8 +12,36 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  /* ---------- Basic ---------- */
   title: "Compound Interest Calculator",
-  description: "Model your investment growth and visualize the power of compound interest.",
+  description:
+    "Byg formue ved at udnytte investerings-matematik med renters rente. Gro millioner af kr. ved at bruge det 8. vidunder af verden.",
+
+  /* ---------- OpenGraph ---------- */
+  openGraph: {
+    title: "Compound Interest Calculator",
+    description:
+      "Byg formue ved at udnytte investerings-matematik med renters rente. Gro millioner af kr. ved at bruge det 8. vidunder af verden.",
+    type: "website",
+    url: "https://compound-interest-calculator.vercel.app/",
+    images: [
+      {
+        url: "/CPH_Trading_Academy_Logo-B2-removebg-preview.png",
+        width: 120,
+        height: 60,
+        alt: "CPH Trading Academy Logo",
+      },
+    ],
+  },
+
+  /* ---------- Twitter ---------- */
+  twitter: {
+    card: "summary_large_image",
+    title: "Compound Interest Calculator",
+    description:
+      "Byg formue ved at udnytte investerings-matematik med renters rente. Gro millioner af kr. ved at bruge det 8. vidunder af verden.",
+    images: ["/CPH_Trading_Academy_Logo-B2-removebg-preview.png"],
+  },
 };
 
 export default function RootLayout({
