@@ -15,8 +15,8 @@ import {
   MenuItem
 } from "@mui/material"
 import MenuIcon from "@mui/icons-material/Menu"
-import CalculateIcon from "@mui/icons-material/Calculate"
-import HomeIcon from "@mui/icons-material/Home"
+import InsightsIcon from "@mui/icons-material/Insights"
+import PinDropIcon from "@mui/icons-material/PinDrop"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -57,8 +57,8 @@ const Navigation = () => {
   }, [scrolled])
 
   const navItems = [
-    { name: "Home", path: "/", icon: <HomeIcon fontSize="small" /> },
-    { name: "Calculator", path: "/calculator", icon: <CalculateIcon fontSize="small" /> }
+    { name: "Home", path: "/", icon: <PinDropIcon fontSize="small" /> },
+    { name: "Calculator", path: "/calculator", icon: <InsightsIcon fontSize="small" /> }
   ]
 
   return (
@@ -90,9 +90,13 @@ const Navigation = () => {
             variant="subtitle2"
             sx={{
               display: { xs: "block", md: "block" },
-              color: "rgba(255, 255, 255, 0.8)",
+              /* Option 3: bright white with subtle glow */
+              color: "#ffffff",
+              textShadow:
+                /* subtle two-layer white glow */
+                "0 0 6px rgba(255,255,255,0.6), 0 0 12px rgba(255,255,255,0.35)",
               fontWeight: 500,
-              letterSpacing: "0.05em",
+              letterSpacing: "0.08em",
               fontSize: "0.75rem",
               position: "absolute",
               left: { xs: "50%", md: 0 },
@@ -142,67 +146,80 @@ const Navigation = () => {
             ))}
           </Box>
 
-          {/* Mobile Navigation */}
-          {isMobile && (
-            <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="menu"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                PaperProps={{
-                  sx: {
-                    backgroundColor: "rgba(15, 23, 42, 0.95)",
-                    backdropFilter: "blur(8px)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                  }
-                }}
-              >
-                {navItems.map((item) => (
-                  <MenuItem 
-                    key={item.name} 
-                    onClick={handleClose}
-                    component={Link}
-                    href={item.path}
-                    selected={pathname === item.path}
-                    sx={{
-                      color: "white",
-                      "&.Mui-selected": {
-                        backgroundColor: "rgba(59, 130, 246, 0.15)",
-                      },
-                      "&:hover": {
-                        backgroundColor: "rgba(255, 255, 255, 0.08)",
-                      },
-                    }}
-                  >
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      {item.icon}
-                      <Typography sx={{ ml: 1 }}>{item.name}</Typography>
-                    </Box>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-          )}
+          {/* Right spacer to balance flex layout on desktop */}
+          <Box 
+            sx={{ 
+              display: { xs: "none", md: "flex" },
+              width: "48px" /* matches icon button size for symmetry */
+            }} 
+          />
+
+          {/* Mobile Navigation and Theme Toggle */}
+          <Box 
+            sx={{ 
+              display: { xs: "flex", md: "none" },
+              alignItems: "center",
+              gap: 1
+            }}
+          >
+            {/* Mobile Menu */}
+            <IconButton
+              size="large"
+              aria-label="menu"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+              PaperProps={{
+                sx: {
+                  backgroundColor: "rgba(15, 23, 42, 0.95)",
+                  backdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                }
+              }}
+            >
+              {navItems.map((item) => (
+                <MenuItem 
+                  key={item.name} 
+                  onClick={handleClose}
+                  component={Link}
+                  href={item.path}
+                  selected={pathname === item.path}
+                  sx={{
+                    color: "white",
+                    "&.Mui-selected": {
+                      backgroundColor: "rgba(59, 130, 246, 0.15)",
+                    },
+                    "&:hover": {
+                      backgroundColor: "rgba(255, 255, 255, 0.08)",
+                    },
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    {item.icon}
+                    <Typography sx={{ ml: 1 }}>{item.name}</Typography>
+                  </Box>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>
