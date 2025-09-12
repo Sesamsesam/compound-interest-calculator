@@ -176,16 +176,16 @@ export default function Home() {
                   >
                     5.000 kr/md over 20 år bliver til{" "}
                     <strong className="font-extrabold text-lg sm:text-xl md:text-2xl">
-                      <AnimatedCounter
-                        value={13441535}
-                        prefix=""
-                        suffix=" kr"
-                        gradientText={true}
-                        duration={1500}
-                        delay={300}
-                        useEasing={true}
-                        formatter={(value) => value.toLocaleString('da-DK')}
-                      />
+                        <AnimatedCounter
+                          value={13441535}
+                          prefix=""
+                          suffix=" kr"
+                          gradientText={true}
+                          duration={1500}
+                          delay={300}
+                          useEasing={true}
+                          formatter={(value) => value.toLocaleString('da-DK')}
+                        />
                     </strong>
                   </Typography>
                 </Box>

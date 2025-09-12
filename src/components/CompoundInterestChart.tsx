@@ -18,7 +18,7 @@ import {
 import { Line, Bar } from 'react-chartjs-2'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import { useTheme } from '@mui/material'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 
 // Register Chart.js components
 ChartJS.register(
@@ -504,24 +504,6 @@ const CompoundInterestChart = ({
 
   return (
     <Box sx={{ width: '100%', height: '100%', minHeight: '400px' }}>
-      {/* Stats section – left-aligned under chart title within card */}
-      {chartType === 'line' && (
-        <Box sx={{ mb: 2 }}>
-          <Typography
-            variant="subtitle2"
-            sx={{ fontWeight: 600, color: theme.palette.text.secondary }}
-          >
-            Total Procent Optjent: {finalReturnPercentage.toFixed(1)}%
-          </Typography>
-          <Typography
-            variant="h5"
-            sx={{ fontWeight: 'bold', color: theme.palette.success.main }}
-          >
-            {formatDKK(totalInterest)}
-          </Typography>
-        </Box>
-      )}
-      
       {chartType === 'line' ? (
         <Line 
           data={lineChartData} 
