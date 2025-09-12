@@ -720,7 +720,9 @@ export default function Calculator() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        py: { xs: 1.5, sm: 2 },   /* equal top & bottom padding */
+                        /* Keep current top padding but reduce bottom padding for visual centering */
+                        pt: { xs: 1.5, sm: 2 },
+                        pb: { xs: 1,   sm: 1.5 },
                         px: { xs: 1.5, sm: 2 },
                       }}
                     >
@@ -729,8 +731,9 @@ export default function Calculator() {
                         sx={{
                           color: 'white',
                           fontWeight: 500,
-                          lineHeight: 1.4,
+                          lineHeight: 1.5,
                           textAlign: 'center',
+                          marginTop: 1
                         }}
                       >
                         Total Investeret&nbsp;|&nbsp;Startkapital&nbsp;+&nbsp;Indbetalinger:&nbsp;
