@@ -533,7 +533,7 @@ export default function Calculator() {
                   {/* Monthly Contribution */}
                   <Box sx={{ mb: 3 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                      <Typography variant="body2">Månedligt Bidrag</Typography>
+                      <Typography variant="body2">Årligt Bidrag</Typography>
                       <Tooltip title="Beløb du investerer hver måned">
                         <IconButton size="small">
                           <InfoIcon fontSize="small" />
