@@ -174,7 +174,7 @@ export default function Home() {
                     className="text-white"
                     sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
                   >
-                    5.000 kr/md over 20 år bliver til{" "}
+                    60.000 kr/året over 20 år bliver til{" "}
                     <strong className="font-extrabold text-lg sm:text-xl md:text-2xl">
                         <AnimatedCounter
                           value={13441535}
