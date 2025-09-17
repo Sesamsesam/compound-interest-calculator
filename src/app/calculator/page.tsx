@@ -534,7 +534,7 @@ export default function Calculator() {
                   <Box sx={{ mb: 3 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                       <Typography variant="body2">Årligt Bidrag</Typography>
-                      <Tooltip title="Beløb du investerer hver måned">
+                      <Tooltip title="Beløb du investerer årligt">
                         <IconButton size="small">
                           <InfoIcon fontSize="small" />
                         </IconButton>
