@@ -137,7 +137,9 @@ export default function Calculator() {
   ): YearlyData[] => {
     const yearlyData: YearlyData[] = [];
     const rate = annualRate / 100;
-    const annualContribution = monthlyContribution * 12;
+    // Use the contribution exactly as entered (already annual),
+    // no automatic ×12 multiplication
+    const annualContribution = monthlyContribution;
     
     let balance = principal;
     let totalContributed = principal;
@@ -220,7 +222,7 @@ export default function Calculator() {
   useEffect(() => {
     const newErrors = {
       principal: principal < 0 || principal > 10000000,
-      monthlyContribution: monthlyContribution < 0 || monthlyContribution > 1000000,
+      monthlyContribution: monthlyContribution < 0 || monthlyContribution > 10000000,
       annualRate: annualRate < 0 || annualRate > 50,
       years: years < 1 || years > 100
     };
@@ -545,7 +547,7 @@ export default function Calculator() {
                       value={monthlyContribution === 0 ? "" : monthlyContribution}
                       onChange={handleMonthlyContributionChange}
                       error={errors.monthlyContribution}
-                      helperText={errors.monthlyContribution ? "Værdi skal være mellem 0 og 1.000.000" : ""}
+                      helperText={errors.monthlyContribution ? "Værdi skal være mellem 0 og 10.000.000" : ""}
                       InputProps={{
                         startAdornment: <InputAdornment position="start">DKK</InputAdornment>,
                       }}
@@ -562,16 +564,6 @@ export default function Calculator() {
                           MozAppearance: 'textfield',
                         },
                       }}
-                    />
-                    <Slider
-                      value={monthlyContribution}
-                      onChange={handleSliderChange('monthlyContribution')}
-                      min={0}
-                      max={50000}
-                      step={500}
-                      valueLabelDisplay="auto"
-                      valueLabelFormat={(value) => formatDKK(value)}
-                      sx={{ mt: 2 }}
                     />
                   </Box>
                   
@@ -807,6 +799,8 @@ export default function Calculator() {
                     <Box 
                       sx={{ 
                         mb: 2,
+                        /* Horizontal padding so the glow from text-shadow isn't clipped */
+                        px: { xs: 3, sm: 3, md: 4 },
                         display: 'flex',
                         flexWrap: 'wrap',
                         justifyContent: 'flex-start',
